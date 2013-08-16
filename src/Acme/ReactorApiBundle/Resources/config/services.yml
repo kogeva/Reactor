@@ -1,0 +1,7 @@
+parameters:
+#    acme_reactor_api.example.class: Acme\ReactorApiBundle\Example
+
+services:
+#    acme_reactor_api.example:
+#        class: %acme_reactor_api.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

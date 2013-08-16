@@ -1,0 +1,23 @@
+registration:
+  pattern: /registration/
+  defaults: { _controller: AcmeReactorApiBundle:Api:registration }
+  requirements:
+    _method:  POST
+
+login:
+  pattern: /login/
+  defaults: { _controller: AcmeReactorApiBundle:Api:login }
+  requirements:
+    _method:  POST
+
+add_friend:
+  pattern: /addFriend/
+  defaults: { _controller: AcmeReactorApiBundle:Api:addFriend }
+
+send_message:
+  pattern: /sendMessage/
+  defaults: { _controller: AcmeReactorApiBundle:Api:sendMessage }
+
+get_messages:
+  pattern: /getMessages/
+  defaults: { _controller: AcmeReactorApiBundle:Api:getMessages }

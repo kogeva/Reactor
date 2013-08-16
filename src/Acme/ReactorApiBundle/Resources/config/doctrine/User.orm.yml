@@ -1,0 +1,30 @@
+Acme\ReactorApiBundle\Entity\User:
+  type: entity
+  table: user
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    username:
+      type: string
+      length: 255
+    email:
+      type: string
+      length: 255
+      unique: true
+    password:
+      type: string
+      length: 255
+    phone:
+      type: integer
+      lenghth: 12
+    session_hash:
+      type: string
+      lenghth: 255
+      nullable: true
+    created_at:
+      type: datetime
+      nullable: true
+  lifecycleCallbacks:
+    prePersist: [ setCreatedAtValue ]

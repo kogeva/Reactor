@@ -1,0 +1,29 @@
+Acme\ReactorApiBundle\Entity\Friend:
+  type: entity
+  table: friend
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    user_id:
+      type: integer
+    friend_id:
+      type: integer
+    created_at:
+      type: datetime
+  manyToOne:
+    user:
+      targetEntity: User
+      inversedBy: friends
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+  oneToOne:
+      shipping:
+        targetEntity: User
+        joinColumn:
+          name: friend_id
+          referencedColumnName: id
+  lifecycleCallbacks:
+    prePersist: [ setCreatedAtValue ]

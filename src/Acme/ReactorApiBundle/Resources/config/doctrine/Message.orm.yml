@@ -1,0 +1,29 @@
+Acme\ReactorApiBundle\Entity\Message:
+  type: entity
+  repositoryClass: Acme\ReactorApiBundle\Repository\MessageRepository
+  table: message
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    from_user:
+      type: integer
+    to_user:
+      type: integer
+    photo:
+      type: string
+      lenght: 255
+    reaction_photo:
+      type: string
+      lenght: 255
+      nullable: true
+    created_at:
+      type: datetime
+  manyToOne:
+      user:
+        targetEntity: User
+        inversedBy: messages
+        joinColumn:
+          name: to_user
+          referencedColumnName: id

@@ -1,0 +1,4 @@
+acme_reactor_api:
+    resource: "@AcmeReactorApiBundle/Resources/config/routing.yml"
+    prefix:   /
+
