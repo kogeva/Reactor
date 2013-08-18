@@ -2,6 +2,7 @@
 
 namespace Acme\ReactorApiBundle\Controller;
 
+use Acme\ReactorApiBundle\Entity\Friend;
 use Acme\ReactorApiBundle\Entity\Message;
 use Acme\ReactorApiBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,18 +20,20 @@ class ApiController extends Controller
 
     public function registrationAction(Request $request)
     {
-        $userName = $request->get('username', false);
-        $email    = $request->get('email', false);
-        $password = $request->get('password', false);
-        $phone    = $request->get('phone', false);
+        $userName    = $request->get('username', false);
+        $email       = $request->get('email', false);
+        $password    = $request->get('password', false);
+        $phone       = $request->get('phone', false);
+        $deviceToken = $request->get('device_token', false);
 
-        if($userName && $email && $password && $phone)
+        if($userName && $email && $password && $phone && $deviceToken)
         {
             $user = new User();
             $user->setUsername($userName);
             $user->setEmail($email);
             $user->setPassword(md5($password));
             $user->setPhone($phone);
+            $user->setDeviceToken($deviceToken);
             $user->setSessionHash(md5(time()));
             $user->setCreatedAt(new \DateTime());
 
@@ -48,16 +51,18 @@ class ApiController extends Controller
 
     public function loginAction(Request $request)
     {
-        $email = $request->get('email', false);
-        $password = $request->get('password', false);
+        $email       = $request->get('email', false);
+        $password    = $request->get('password', false);
+        $deviceToken = $request->get('device_token', false);
 
-        if($email && $password)
+        if($email && $password && $deviceToken)
         {
             $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneByEmail($email);
 
             if($user->getPassword() === md5($password))
             {
                 $user->setSessionHash(md5(time()));
+                $user->setDeviceToken($deviceToken);
 
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($user);
@@ -77,15 +82,138 @@ class ApiController extends Controller
     {
         $userId      = $request->get('user_id', false);
         $sessionHash = $request->get('session_hash', false);
+        $friendPhone = $request->get('friend_phone', false);
+
+        if($userId && $sessionHash)
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $sessionHash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $friendUser = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneByPhone($friendPhone);
+            if($friendUser)
+            {
+                $friend = new Friend();
+                $friend->setUser($friendUser);
+                $friend->setShipping($friendUser);
+                $friend->setUserId($user->getId());
+                $friend->setFriendId($friendUser->getId());
+                $friend->setCreatedAt(new \DateTime());
+
+                $em->persist($friend);
+                $em->flush();
+
+                return new JsonResponse(array(
+                    'status' => 'success',
+                    'friend_id'  => $friendUser->getId(),
+                    'friend_phone' => $friendUser->getPhone(),
+                    'friend_username' => $friendUser->getUserName())
+                );
+            }
+            else
+                die('die'); //do someething
+
+        }
+
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+
+    }
+
+    public function getFriendsAction(Request $request)
+    {
+        $userId      = $request->get('user_id', false);
+        $sessionHash = $request->get('session_hash', false);
 
         if($userId && $sessionHash)
         {
             $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
-            if($user->getSessionHash() === $sessionHash)
-            {
+            if($user->getSessionHash() !== $sessionHash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
+            $friends = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getFriendsArray($userId);
+
+            foreach($friends as $key => $friend)
+            {
+                $friendIds = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getIdFriens($friend['id']);
+                $friendIdsArray = array();
+
+                foreach($friendIds as $friendId)
+                {
+                    $friendIdsArray[] = $friendId['friend_id'];
+                }
+
+                if(array_search($userId,$friendIdsArray))
+                    $friends[$key]['confirmed'] = true ;
+                else
+                    $friends[$key]['confirmed'] = false ;
             }
+
+            var_dump($friends) or die;
+            return new JsonResponse(array(
+                    'status' => 'success',
+                    'friends' => $friends)
+            );
         }
+
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
+
+    public function checkUserInSystemAction(Request $request)
+    {
+        $userId      = $request->get('user_id', false);
+        $sessionHash = $request->get('session_hash', false);
+        $phones      = $request->get('phones', false);
+
+        if($userId && $sessionHash && $phones)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $sessionHash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $phoneArray = explode(',', $phones);
+
+            $phoneArraInSystem = array();
+
+            foreach($phoneArray as $phone)
+            {
+                $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findUserByPhone($phone);
+
+                $phoneArraInSystem[] = array('phone' => $phone, 'id' => (!empty($user)) ? $user[0]['id'] : null );
+            }
+
+            return new JsonResponse(array(
+                    'status' => 'success',
+                    'users' => $phoneArraInSystem)
+            );
+        }
+
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
+
+    public function searchFriendsAction(Request $request)
+    {
+        $userId      = $request->get('user_id', false);
+        $sessionHash = $request->get('session_hash', false);
+        $username    = $request->get('friend_username', false);
+
+        if($userId && $sessionHash && $username)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $sessionHash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $friends = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findByUserName($username);
+
+            return new JsonResponse(array(
+                    'status' => 'success',
+                    'friends' => (!empty($friends)) ? $friends : 'null'
+                )
+            );
+        }
+
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }
 
     public function sendMessageAction(Request $request)
@@ -110,7 +238,6 @@ class ApiController extends Controller
                 $reactionFile = $reactionFile->move($this->get('kernel')->getRootDir(). '/../web/images', $reactionFilename);
             }
             $friend_user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($friend_id);
-
             $message = new Message();
             $message->setFromUser($userId);
             $message->setToUser($friend_id);

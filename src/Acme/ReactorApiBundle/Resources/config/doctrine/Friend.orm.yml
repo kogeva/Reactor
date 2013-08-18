@@ -1,5 +1,6 @@
 Acme\ReactorApiBundle\Entity\Friend:
   type: entity
+  repositoryClass: Acme\ReactorApiBundle\Repository\FriendRepository
   table: friend
   id:
     id:
@@ -17,13 +18,7 @@ Acme\ReactorApiBundle\Entity\Friend:
       targetEntity: User
       inversedBy: friends
       joinColumn:
-        name: user_id
+        name: friend_id
         referencedColumnName: id
-  oneToOne:
-      shipping:
-        targetEntity: User
-        joinColumn:
-          name: friend_id
-          referencedColumnName: id
   lifecycleCallbacks:
     prePersist: [ setCreatedAtValue ]

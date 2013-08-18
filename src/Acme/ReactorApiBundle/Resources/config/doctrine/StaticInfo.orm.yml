@@ -1,0 +1,16 @@
+Acme\ReactorApiBundle\Entity\StaticInfo:
+  type: entity
+  table: info
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    about_reactr:
+      type: text
+    privacy:
+      type: text
+    terms:
+      type: text
+    contact_us:
+      type: text

@@ -257,4 +257,70 @@ class User
     
         return $this;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $friends;
+
+
+    /**
+     * Add friends
+     *
+     * @param \Acme\ReactorApiBundle\Entity\Friend $friends
+     * @return User
+     */
+    public function addFriend(\Acme\ReactorApiBundle\Entity\Friend $friends)
+    {
+        $this->friends[] = $friends;
+    
+        return $this;
+    }
+
+    /**
+     * Remove friends
+     *
+     * @param \Acme\ReactorApiBundle\Entity\Friend $friends
+     */
+    public function removeFriend(\Acme\ReactorApiBundle\Entity\Friend $friends)
+    {
+        $this->friends->removeElement($friends);
+    }
+
+    /**
+     * Get friends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFriends()
+    {
+        return $this->friends;
+    }
+    /**
+     * @var string
+     */
+    private $device_token;
+
+
+    /**
+     * Set device_token
+     *
+     * @param string $deviceToken
+     * @return User
+     */
+    public function setDeviceToken($deviceToken)
+    {
+        $this->device_token = $deviceToken;
+    
+        return $this;
+    }
+
+    /**
+     * Get device_token
+     *
+     * @return string 
+     */
+    public function getDeviceToken()
+    {
+        return $this->device_token;
+    }
 }

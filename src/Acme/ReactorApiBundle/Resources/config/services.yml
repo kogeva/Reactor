@@ -5,3 +5,15 @@ services:
 #    acme_reactor_api.example:
 #        class: %acme_reactor_api.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+#services:
+#    ens.jobeet.admin.category:
+#        class: Acme\ReactorApiBundle\Admin\UserAdmin
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, group: reactor, label: User }
+#        arguments: [null, Acme\ReactorApiBundle\Entity\User, SonataAdminBundle:CRUD]
+#    acme.reactr_api.admin.static_info:
+#            class: Acme\ReactorApiBundle\Admin\StaticInfoAdmin
+#            tags:
+#                - { name: sonata.admin, manager_type: orm, group: reactor, label: Static Info }
+#            arguments: [null, Acme\ReactorApiBundle\Entity\StaticInfo, SonataAdminBundle:CRUD]

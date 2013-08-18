@@ -1,0 +1,13 @@
+# MyBundle/Resources/config/admin.yml
+
+services:
+    sonata.admin.tag:
+        class: Acme\ReactorApiBundle\Admin\StaticInfoAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: posts, label: "Static information" }
+        arguments:
+            - ~
+            - Acme\ReactorApiBundle\Entity\StaticInfo
+            - 'SonataAdminBundle:CRUD'
+        calls:
+            - [ setTranslationDomain, [AcmeReactorApiBundle]]

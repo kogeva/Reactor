@@ -10,10 +10,6 @@ login:
   requirements:
     _method:  POST
 
-add_friend:
-  pattern: /addFriend/
-  defaults: { _controller: AcmeReactorApiBundle:Api:addFriend }
-
 send_message:
   pattern: /sendMessage/
   defaults: { _controller: AcmeReactorApiBundle:Api:sendMessage }
@@ -21,3 +17,23 @@ send_message:
 get_messages:
   pattern: /getMessages/
   defaults: { _controller: AcmeReactorApiBundle:Api:getMessages }
+
+add_friend:
+  pattern: /addFriend/
+  defaults: { _controller: AcmeReactorApiBundle:Api:addFriend }
+
+get_friends:
+  pattern: /getFriends/
+  defaults: { _controller: AcmeReactorApiBundle:Api:getFriends }
+
+search_friends:
+  pattern: /searchFriends/
+  defaults: { _controller: AcmeReactorApiBundle:Api:searchFriends }
+
+delete_friend:
+  pattern: /deleteFriends/
+  defaults: { _controller: AcmeReactorApiBundle:Api:deleteFriends }
+
+check_user_in_system:
+  pattern: /checkUserInSystem/
+  defaults: { _controller: AcmeReactorApiBundle:Api:checkUserInSystem }

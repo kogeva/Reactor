@@ -1,5 +1,6 @@
 Acme\ReactorApiBundle\Entity\User:
   type: entity
+  repositoryClass: Acme\ReactorApiBundle\Repository\UserRepository
   table: user
   id:
     id:
@@ -19,6 +20,10 @@ Acme\ReactorApiBundle\Entity\User:
     phone:
       type: integer
       lenghth: 12
+    device_token:
+      type: string
+      length: 256
+      nullable: true
     session_hash:
       type: string
       lenghth: 255
@@ -26,5 +31,9 @@ Acme\ReactorApiBundle\Entity\User:
     created_at:
       type: datetime
       nullable: true
+  oneToMany:
+    friends:
+      targetEntity: Friend
+      mappedBy: user
   lifecycleCallbacks:
     prePersist: [ setCreatedAtValue ]
