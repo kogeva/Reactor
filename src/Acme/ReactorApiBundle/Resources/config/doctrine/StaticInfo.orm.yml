@@ -14,3 +14,5 @@ Acme\ReactorApiBundle\Entity\StaticInfo:
       type: text
     contact_us:
       type: text
+    how_it_works:
+      type: text

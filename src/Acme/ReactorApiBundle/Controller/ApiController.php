@@ -150,7 +150,6 @@ class ApiController extends Controller
                     $friends[$key]['confirmed'] = false ;
             }
 
-            var_dump($friends) or die;
             return new JsonResponse(array(
                     'status' => 'success',
                     'friends' => $friends)

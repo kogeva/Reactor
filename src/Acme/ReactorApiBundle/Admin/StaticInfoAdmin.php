@@ -18,6 +18,7 @@ class StaticInfoAdmin extends Admin
             ->add('privacy')
             ->add('terms')
             ->add('contact_us')
+            ->add('how_it_works')
         ;
     }
 
@@ -28,6 +29,7 @@ class StaticInfoAdmin extends Admin
             ->add('Privacy')
             ->add('Terms')
             ->add('Contact Us')
+            ->add('How It Works')
         ;
     }
 }
