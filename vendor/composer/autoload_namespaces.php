@@ -13,6 +13,7 @@ return array(
     'Symfony\\Bundle\\MonologBundle' => array($vendorDir . '/symfony/monolog-bundle'),
     'Symfony\\Bundle\\AsseticBundle' => array($vendorDir . '/symfony/assetic-bundle'),
     'Symfony\\' => array($vendorDir . '/symfony/symfony/src'),
+    'Stfalcon\\Bundle\\TinymceBundle' => array($vendorDir . '/stfalcon/tinymce-bundle'),
     'Sonata\\jQueryBundle' => array($vendorDir . '/sonata-project/jquery-bundle'),
     'Sonata\\DoctrineORMAdminBundle' => array($vendorDir . '/sonata-project/doctrine-orm-admin-bundle'),
     'Sonata\\BlockBundle' => array($vendorDir . '/sonata-project/block-bundle'),

@@ -37,3 +37,7 @@ delete_friend:
 check_user_in_system:
   pattern: /checkUserInSystem/
   defaults: { _controller: AcmeReactorApiBundle:Api:checkUserInSystem }
+
+get_static_info:
+  pattern: /getStaticInfo/
+  defaults: { _controller: AcmeReactorApiBundle:Api:getStaticInfo }

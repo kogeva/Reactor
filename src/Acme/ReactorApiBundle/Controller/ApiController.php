@@ -26,6 +26,7 @@ class ApiController extends Controller
         $phone       = $request->get('phone', false);
         $deviceToken = $request->get('device_token', false);
 
+
         if($userName && $email && $password && $phone && $deviceToken)
         {
             $user = new User();
@@ -34,8 +35,20 @@ class ApiController extends Controller
             $user->setPassword(md5($password));
             $user->setPhone($phone);
             $user->setDeviceToken($deviceToken);
+            $user->setPrivacyMessage(false);
             $user->setSessionHash(md5(time()));
             $user->setCreatedAt(new \DateTime());
+
+            $validator = $this->get('validator');
+            $errors =  $validator->validate($user);
+
+            if(count($errors))
+            {
+                $messages = array();
+                foreach($errors as $error)
+                    $messages[$error->getPropertyPath()] = $error->getMessage();
+                return new JsonResponse(array( 'status' => 'failed', 'errors' => $messages));
+            }
 
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($user);
@@ -220,6 +233,7 @@ class ApiController extends Controller
         $userId       = $request->get('user_id', false);
         $session_hash = $request->get('session_hash', false);
         $friend_id    = $request->get('friend_id', false);
+        $text         = $request->get('text', '');
         $file         = $request->files->get('photo');
         $reactionFile = $request->files->get('reaction_photo', false);
 
@@ -241,6 +255,7 @@ class ApiController extends Controller
             $message->setFromUser($userId);
             $message->setToUser($friend_id);
             $message->setPhoto($this->generateSrcImage($filename));
+            $message->setText($text);
             if($reactionFile)
                 $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
             $message->setUser($friend_user);
@@ -254,7 +269,8 @@ class ApiController extends Controller
                 'status' => 'success',
                 'message_id' => $message->getId(),
                 'photo' => $message->getPhoto(),
-                'reaction_photo'=> $message->getReactionPhoto())
+                'reaction_photo'=> $message->getReactionPhoto(),
+                'text' => $message->getText())
             );
         }
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
@@ -270,6 +286,10 @@ class ApiController extends Controller
 
         if($userId && $session_hash)
         {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $session_hash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
             $em = $this->getDoctrine()->getEntityManager();
             $messages = $em->getRepository('AcmeReactorApiBundle:Message')->findAllByUserId($userId);
             foreach($messages as $key => $value)
@@ -284,6 +304,36 @@ class ApiController extends Controller
                 'messages' => $messages)
             );
         }
+    }
+
+    public function getStaticInfoAction(Request $request)
+    {
+        $userId       = $request->get('user_id', false);
+        $session_hash = $request->get('session_hash', false);
+
+        if($userId && $session_hash)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $session_hash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $staticInfoCollection = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:StaticInfo')->findAll();
+
+            foreach($staticInfoCollection as  $staticInfo)
+                //var_dump($staticInfo) or die;
+                return new JsonResponse(array(
+                        'status' => 'success',
+                        'static_info' => array(
+                            'about_reactr' => $staticInfo->getAboutReactr(),
+                            'privacy' => $staticInfo->getPrivacy(),
+                            'terms' => $staticInfo->getTerms(),
+                            'contact_us' => $staticInfo->getContactUs(),
+                            'how_it_works' => $staticInfo->getHowItWorks()
+                        ))
+                );
+        }
+
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }
 
     private function generateSrcImage($filename)

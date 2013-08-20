@@ -323,4 +323,32 @@ class User
     {
         return $this->device_token;
     }
+    /**
+     * @var boolean
+     */
+    private $privacy_message;
+
+
+    /**
+     * Set privacy_message
+     *
+     * @param boolean $privacyMessage
+     * @return User
+     */
+    public function setPrivacyMessage($privacyMessage = true)
+    {
+        $this->privacy_message = $privacyMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Get privacy_message
+     *
+     * @return boolean 
+     */
+    public function getPrivacyMessage()
+    {
+        return $this->privacy_message;
+    }
 }

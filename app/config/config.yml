@@ -11,7 +11,7 @@ framework:
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
-    validation:      { enable_annotations: true }
+    validation:      { enabled: true }
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
@@ -92,6 +92,15 @@ sonata_admin:
         blocks:
             # display a dashboard block
             - { position: left, type: sonata.admin.block.admin_list }
+
+stfalcon_tinymce:
+        include_jquery: false
+        tinymce_jquery: false
+        selector: "textarea"
+        language: %locale%
+        theme:
+            simple:
+                theme: "modern"
 #
 #sonata_user:
 #    security_acl: true

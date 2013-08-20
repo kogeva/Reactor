@@ -1,0 +1,17 @@
+Acme\ReactorApiBundle\Entity\User:
+  constraints:
+          - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [ username ]
+              errorPath: username
+              message: This user exist in system
+          - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [ email ]
+              errorPath: email
+              message: This email exist in system
+  properties:
+          username:
+              - NotBlank: ~
+          email:
+              - Email: ~
+#  constraints:
+#          - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username

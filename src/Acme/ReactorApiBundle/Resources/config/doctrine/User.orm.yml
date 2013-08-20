@@ -10,6 +10,7 @@ Acme\ReactorApiBundle\Entity\User:
     username:
       type: string
       length: 255
+      unique: true
     email:
       type: string
       length: 255
@@ -28,6 +29,9 @@ Acme\ReactorApiBundle\Entity\User:
       type: string
       lenghth: 255
       nullable: true
+    privacy_message:
+      type: boolean
+      generator: { strategy: 1 }
     created_at:
       type: datetime
       nullable: true

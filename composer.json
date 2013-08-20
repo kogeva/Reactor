@@ -20,7 +20,8 @@
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "sonata-project/doctrine-orm-admin-bundle":"dev-master",
-        "friendsofsymfony/user-bundle": "2.0.*@dev"
+        "friendsofsymfony/user-bundle": "2.0.*@dev",
+        "stfalcon/tinymce-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

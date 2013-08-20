@@ -11,6 +11,9 @@ Acme\ReactorApiBundle\Entity\Message:
       type: integer
     to_user:
       type: integer
+    text:
+      type: text
+      nullable: true
     photo:
       type: string
       lenght: 255

@@ -192,4 +192,32 @@ class Message
     {
         return $this->reaction_photo;
     }
+    /**
+     * @var string
+     */
+    private $text;
+
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     * @return Message
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string 
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
 }
