@@ -26,6 +26,10 @@ get_friends:
   pattern: /getFriends/
   defaults: { _controller: AcmeReactorApiBundle:Api:getFriends }
 
+get_friends_who_add_me:
+  pattern: /getWhoAddMe/
+  defaults: { _controller: AcmeReactorApiBundle:Api:getWhoAddMe }
+
 search_friends:
   pattern: /searchFriends/
   defaults: { _controller: AcmeReactorApiBundle:Api:searchFriends }

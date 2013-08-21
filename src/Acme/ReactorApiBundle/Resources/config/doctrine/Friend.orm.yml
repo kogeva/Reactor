@@ -20,5 +20,11 @@ Acme\ReactorApiBundle\Entity\Friend:
       joinColumn:
         name: friend_id
         referencedColumnName: id
+    friend:
+      targetEntity: User
+      inversedBy: userss
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
   lifecycleCallbacks:
     prePersist: [ setCreatedAtValue ]

@@ -171,4 +171,32 @@ class Friend
     {
         // Add your code here
     }
+    /**
+     * @var \Acme\ReactorApiBundle\Entity\User
+     */
+    private $friend;
+
+
+    /**
+     * Set friend
+     *
+     * @param \Acme\ReactorApiBundle\Entity\User $friend
+     * @return Friend
+     */
+    public function setFriend(\Acme\ReactorApiBundle\Entity\User $friend = null)
+    {
+        $this->friend = $friend;
+    
+        return $this;
+    }
+
+    /**
+     * Get friend
+     *
+     * @return \Acme\ReactorApiBundle\Entity\User 
+     */
+    public function getFriend()
+    {
+        return $this->friend;
+    }
 }

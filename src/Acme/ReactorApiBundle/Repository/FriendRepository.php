@@ -32,4 +32,15 @@ class FriendRepository extends EntityRepository
                 WHERE fr.user_id = :id'
             )->setParameter('id', $id)->getArrayResult();
     }
+
+    public function getIdFriendsWhoAddMe($id)
+    {
+        return $this->getEntityManager()
+            ->createQuery('
+                SELECT  u.id, u.username, u.phone , u.privacy_message, fr.user_id
+                FROM AcmeReactorApiBundle:Friend fr
+                JOIN fr.friend u
+                WHERE fr.friend_id = :id'
+            )->setParameter('id', $id)->getArrayResult();
+    }
 }

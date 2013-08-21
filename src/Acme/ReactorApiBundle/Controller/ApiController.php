@@ -204,6 +204,28 @@ class ApiController extends Controller
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }
 
+    public function getWhoAddMeAction(Request $request)
+    {
+        $userId      = $request->get('user_id', false);
+        $sessionHash = $request->get('session_hash', false);
+
+        if($userId && $sessionHash)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $sessionHash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $friends = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getIdFriendsWhoAddMe($user);
+
+            return new JsonResponse(array(
+                    'status' => 'success',
+                    'friends' => $friends)
+            );
+
+        }
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
+
     public function searchFriendsAction(Request $request)
     {
         $userId      = $request->get('user_id', false);
