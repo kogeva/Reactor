@@ -152,7 +152,6 @@ class ApiController extends Controller
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
             $friends = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getFriendsArray($userId);
-
             foreach($friends as $key => $friend)
             {
                 $friendIds = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getIdFriens($friend['id']);
@@ -163,7 +162,7 @@ class ApiController extends Controller
                     $friendIdsArray[] = $friendId['friend_id'];
                 }
 
-                if(array_search($userId,$friendIdsArray))
+                if(array_search($friend['id'],$friendIdsArray) !== false)
                     $friends[$key]['confirmed'] = true ;
                 else
                     $friends[$key]['confirmed'] = false ;
