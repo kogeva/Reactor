@@ -106,10 +106,16 @@ class ApiController extends Controller
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
             $friendUser = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneByPhone($friendPhone);
+
+            $ids = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->checkExistRelationFriends($userId, $friendUser->getId());
+            if($ids)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => 'the user is already in your friends'));
+
             if($friendUser)
             {
                 $friend = new Friend();
                 $friend->setUser($friendUser);
+                $friend->setFriend($user);
                 $friend->setShipping($friendUser);
                 $friend->setUserId($user->getId());
                 $friend->setFriendId($friendUser->getId());
