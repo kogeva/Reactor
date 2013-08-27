@@ -16,7 +16,7 @@ class MessageRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery('
-                SELECT ms, u.username
+                SELECT ms.id, ms.from_user, ms.to_user, ms.text, ms.photo, ms.reaction_photo, ms.is_read, ms.created_at, u.username
                 FROM AcmeReactorApiBundle:Message ms
                 LEFT JOIN ms.from u
                 WHERE ms.to_user = :id

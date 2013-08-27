@@ -426,7 +426,6 @@ class ApiController extends Controller
             $messages = $em->getRepository('AcmeReactorApiBundle:Message')->findAllByUserId($userId);
             foreach($messages as $key => $value)
             {
-                $value = $value[0];
                 if($value['from_user'] == $userId)
                     $messages[$key]['from_me'] = true;
                 else
