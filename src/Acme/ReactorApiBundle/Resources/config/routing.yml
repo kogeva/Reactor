@@ -10,13 +10,25 @@ login:
   requirements:
     _method:  POST
 
-send_message:
-  pattern: /sendMessage/
-  defaults: { _controller: AcmeReactorApiBundle:Api:sendMessage }
+set_privacy_message:
+  pattern: /setPrivacyMessage/
+  defaults: { _controller: AcmeReactorApiBundle:Api:setPrivacyMessage }
+
+edit_user_data:
+  pattern: /editUserData/
+  defaults: { _controller: AcmeReactorApiBundle:Api:editUserData }
+
+send_messages:
+  pattern: /sendMessages/
+  defaults: { _controller: AcmeReactorApiBundle:Api:sendMessages }
 
 get_messages:
   pattern: /getMessages/
   defaults: { _controller: AcmeReactorApiBundle:Api:getMessages }
+
+read_messages:
+  pattern: /readMessages/
+  defaults: { _controller: AcmeReactorApiBundle:Api:readMessages }
 
 add_friend:
   pattern: /addFriend/
@@ -35,8 +47,8 @@ search_friends:
   defaults: { _controller: AcmeReactorApiBundle:Api:searchFriends }
 
 delete_friend:
-  pattern: /deleteFriends/
-  defaults: { _controller: AcmeReactorApiBundle:Api:deleteFriends }
+  pattern: /deleteFriend/
+  defaults: { _controller: AcmeReactorApiBundle:Api:deleteFriend }
 
 check_user_in_system:
   pattern: /checkUserInSystem/
@@ -45,3 +57,7 @@ check_user_in_system:
 get_static_info:
   pattern: /getStaticInfo/
   defaults: { _controller: AcmeReactorApiBundle:Api:getStaticInfo }
+
+check_username_and_email:
+  pattern: /checkUsernameAndEmail/
+  defaults: { _controller: AcmeReactorApiBundle:Api:checkUsernameAndEmail }

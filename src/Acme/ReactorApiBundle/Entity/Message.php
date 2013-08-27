@@ -220,4 +220,73 @@ class Message
     {
         return $this->text;
     }
+    /**
+     * @var boolean
+     */
+    private $is_read;
+
+
+    /**
+     * Set is_read
+     *
+     * @param boolean $isRead
+     * @return Message
+     */
+    public function setIsRead($isRead)
+    {
+        $this->is_read = $isRead;
+    
+        return $this;
+    }
+
+    /**
+     * Get is_read
+     *
+     * @return boolean 
+     */
+    public function getIsRead()
+    {
+        return $this->is_read;
+    }
+    /**
+     * @var \Acme\ReactorApiBundle\Entity\User
+     */
+    private $from;
+
+
+    /**
+     * Set from
+     *
+     * @param \Acme\ReactorApiBundle\Entity\User $from
+     * @return Message
+     */
+    public function setFrom(\Acme\ReactorApiBundle\Entity\User $from = null)
+    {
+        $this->from = $from;
+    
+        return $this;
+    }
+
+    /**
+     * Get from
+     *
+     * @return \Acme\ReactorApiBundle\Entity\User 
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    public function toArray()
+    {
+        return array(
+            'id'             => $this->id,
+            'from_user'      => $this->from_user,
+            'to_user'        => $this->to_user,
+            'photo'          => $this->photo,
+            'reaction_photo' => $this->reaction_photo,
+            'created_at'     => $this->created_at->format('Y-m-d H:i:s'),
+            'text'           => $this->text
+        );
+    }
 }

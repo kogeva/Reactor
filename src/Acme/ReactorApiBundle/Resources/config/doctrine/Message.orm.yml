@@ -21,6 +21,9 @@ Acme\ReactorApiBundle\Entity\Message:
       type: string
       lenght: 255
       nullable: true
+    is_read:
+      type: boolean
+      nullable: true
     created_at:
       type: datetime
   manyToOne:
@@ -29,4 +32,10 @@ Acme\ReactorApiBundle\Entity\Message:
         inversedBy: messages
         joinColumn:
           name: to_user
+          referencedColumnName: id
+  manyToOne:
+      from:
+        targetEntity: User
+        joinColumn:
+          name: from_user
           referencedColumnName: id

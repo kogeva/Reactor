@@ -42,4 +42,15 @@ class UserRepository extends EntityRepository
                 WHERE u.phone = :phone'
             )->setParameter('phone', $phone)->getArrayResult();
     }
+
+    public function findByUsernameAndEmail($username, $email)
+    {
+        return $this->getEntityManager()
+            ->createQuery('
+                SELECT u.username, u.email
+                FROM AcmeReactorApiBundle:User u
+                WHERE u.username = :username
+                  OR u.email = :email'
+            )->setParameters(array('username' => $username, 'email' => $email))->getArrayResult();
+    }
 }

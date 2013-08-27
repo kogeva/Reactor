@@ -16,11 +16,24 @@ class MessageRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery('
-                SELECT ms
+                SELECT ms, u.username
                 FROM AcmeReactorApiBundle:Message ms
+                LEFT JOIN ms.from u
                 WHERE ms.to_user = :id
                   OR ms.from_user = :id
                 ORDER BY ms.created_at DESC'
             )->setParameter('id', $id)->getArrayResult();
+    }
+
+    public function findByIdAndToUser($id, $toUser)
+    {
+        return $this->getEntityManager()
+            ->createQuery('
+                SELECT ms
+                FROM AcmeReactorApiBundle:Message ms
+                WHERE ms.to_user = :to_user
+                  AND ms.id = :id
+                ORDER BY ms.created_at DESC'
+            )->setParameters(array('id' => $id, 'to_user' => $toUser))->getOneOrNullResult();
     }
 }
