@@ -365,13 +365,15 @@ class ApiController extends Controller
             if($user->getSessionHash() !== $session_hash)
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
-            $filename = sha1(time());
+            $filename = sha1(microtime());
             $file = $file->move($this->get('kernel')->getRootDir(). '/../web/images', $filename);
             if($reactionFile)
             {
-                $reactionFilename = sha1(time());
+                $reactionFilename = sha1(microtime());
                 $reactionFile = $reactionFile->move($this->get('kernel')->getRootDir(). '/../web/images', $reactionFilename);
             }
+
+            //var_dump($filename, $reactionFilename) or die;
 
             $friends = explode(',', $friend_ids);
 
@@ -423,7 +425,7 @@ class ApiController extends Controller
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
             $em = $this->getDoctrine()->getEntityManager();
-            $messages = $em->getRepository('AcmeReactorApiBundle:Message')->findAllByUserId($userId);
+            $messages = $em->getRepository('AcmeReactorApiBundle:Message')->findAllByUserId($userId, $from, $to - $from);
             foreach($messages as $key => $value)
             {
                 if($value['from_user'] == $userId)

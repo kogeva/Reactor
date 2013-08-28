@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class MessageRepository extends EntityRepository
 {
-    public function findAllByUserId($id)
+    public function findAllByUserId($id, $from, $to)
     {
         return $this->getEntityManager()
             ->createQuery('
@@ -21,8 +21,12 @@ class MessageRepository extends EntityRepository
                 LEFT JOIN ms.from u
                 WHERE ms.to_user = :id
                   OR ms.from_user = :id
+
                 ORDER BY ms.created_at DESC'
-            )->setParameter('id', $id)->getArrayResult();
+            )
+            ->setFirstResult($from)
+            ->setMaxResults($to)
+            ->setParameters(array('id' => $id))->getArrayResult();
     }
 
     public function findByIdAndToUser($id, $toUser)
