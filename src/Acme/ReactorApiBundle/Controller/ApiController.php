@@ -221,9 +221,11 @@ class ApiController extends Controller
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
             $friends = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getFriendsArray($userId);
+
             foreach($friends as $key => $friend)
             {
                 $friendIds = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getIdFriens($friend['id']);
+
                 $friendIdsArray = array();
 
                 foreach($friendIds as $friendId)
@@ -231,7 +233,7 @@ class ApiController extends Controller
                     $friendIdsArray[] = $friendId['friend_id'];
                 }
 
-                if(array_search($friend['id'],$friendIdsArray) !== false)
+                if(array_search($userId,$friendIdsArray) !== false)
                     $friends[$key]['confirmed'] = true ;
                 else
                     $friends[$key]['confirmed'] = false ;
@@ -372,8 +374,6 @@ class ApiController extends Controller
                 $reactionFilename = sha1(microtime());
                 $reactionFile = $reactionFile->move($this->get('kernel')->getRootDir(). '/../web/images', $reactionFilename);
             }
-
-            //var_dump($filename, $reactionFilename) or die;
 
             $friends = explode(',', $friend_ids);
 

@@ -29,7 +29,7 @@ class FriendRepository extends EntityRepository
             ->createQuery('
                 SELECT  fr.friend_id
                 FROM AcmeReactorApiBundle:Friend fr
-                WHERE fr.friend_id = :id'
+                WHERE fr.user_id = :id'
             )->setParameter('id', $id)->getArrayResult();
     }
 
