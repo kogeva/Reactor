@@ -46,6 +46,10 @@ search_friends:
   pattern: /searchFriends/
   defaults: { _controller: AcmeReactorApiBundle:Api:searchFriends }
 
+block_friend:
+  pattern: /blockFriend/
+  defaults: { _controller: AcmeReactorApiBundle:Api:blockFriend }
+
 delete_friend:
   pattern: /deleteFriend/
   defaults: { _controller: AcmeReactorApiBundle:Api:deleteFriend }

@@ -199,4 +199,32 @@ class Friend
     {
         return $this->friend;
     }
+    /**
+     * @var boolean
+     */
+    private $blocked;
+
+
+    /**
+     * Set blocked
+     *
+     * @param boolean $blocked
+     * @return Friend
+     */
+    public function setBlocked($blocked = false)
+    {
+        $this->blocked = $blocked;
+    
+        return $this;
+    }
+
+    /**
+     * Get blocked
+     *
+     * @return boolean 
+     */
+    public function getBlocked()
+    {
+        return $this->blocked;
+    }
 }

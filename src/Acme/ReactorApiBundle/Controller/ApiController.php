@@ -56,7 +56,8 @@ class ApiController extends Controller
             return new JsonResponse(array(
                 'status'       => 'success',
                 'user_id'      => $user->getId(),
-                'session_hash' => $user->getSessionHash()));
+                'session_hash' => $user->getSessionHash()
+            ));
         }
         else
             return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required fields is empty'));
@@ -84,7 +85,9 @@ class ApiController extends Controller
                 return new JsonResponse(array(
                     'status' => 'success',
                     'user_id' => $user->getId(),
-                    'session_hash' => $user->getSessionHash()));
+                    'session_hash' => $user->getSessionHash(),
+                    'privacy_message' => $user->getPrivacyMessage()
+                ));
             }
             else
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect password'));
@@ -118,7 +121,7 @@ class ApiController extends Controller
     {
         $userId          = $request->get('user_id', false);
         $sessionHash     = $request->get('session_hash', false);
-        $username        = $request->get('username', false);
+        $email        = $request->get('email', false);
         $phone           = $request->get('phone', false);
 
         if($userId && $sessionHash)
@@ -129,13 +132,13 @@ class ApiController extends Controller
 
             $errorArray = array();
 
-            if($username)
+            if($email)
             {
-               $existUser = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('username' => $username));
+               $existUser = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('email' => $email));
                 if($existUser)
-                    $errorArray[] = 'This user name already exists in the system';
+                    $errorArray[] = 'This email already exists in the system';
                 else
-                    $user->setUsername($username);
+                    $user->setUsername($email);
             }
 
             if($phone)
@@ -147,7 +150,7 @@ class ApiController extends Controller
                     $user->setPhone($phone);
             }
 
-            if(count($errorArray) > 0)
+            if(count($errorArray))
                 return new JsonResponse(array( 'status' => 'failed', 'errors' => $errorArray));
 
             $em = $this->getDoctrine()->getEntityManager();
@@ -201,8 +204,7 @@ class ApiController extends Controller
                 );
             }
             else
-                die('die'); //do someething
-
+                die('die');
         }
 
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
@@ -224,14 +226,20 @@ class ApiController extends Controller
 
             foreach($friends as $key => $friend)
             {
-                $friendIds = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getIdFriens($friend['id']);
+                $friendIds = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->getIdAndBlockedFriends($friend['id']);
 
                 $friendIdsArray = array();
+                $isBlockedMe = null;
+
 
                 foreach($friendIds as $friendId)
                 {
                     $friendIdsArray[] = $friendId['friend_id'];
+                    if($friendId['friend_id'] == $userId)
+                        $isBlockedMe = $friendId['blocked'];
                 }
+
+                $friends[$key]['blocked_me'] = $isBlockedMe;
 
                 if(array_search($userId,$friendIdsArray) !== false)
                     $friends[$key]['confirmed'] = true ;
@@ -246,6 +254,46 @@ class ApiController extends Controller
         }
 
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
+
+    public function setBlockFriendAction(Request $request)
+    {
+        $userId      = $request->get('user_id', false);
+        $sessionHash = $request->get('session_hash', false);
+        $friendId    = $request->get('friend_id', false);
+        $blocked     = $request->get('set_block', false);
+
+        if($userId && $sessionHash && $friendId && $blocked)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $sessionHash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            /** @var $friend Friend */
+            $friend = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->findOneBy(array('friend_id' => $friendId));
+
+            if($friend)
+            {
+                if($blocked)
+                    $friend->setBlocked(true);
+                else
+                    $friend->setBlocked(false);
+
+                $em =$this->getDoctrine()->getEntityManager();
+                $em->persist($friend);
+                $em->flush();
+
+                return new JsonResponse(array('status' => 'success'));
+            }
+            else
+                return new JsonResponse(array(
+                    'status' => 'failed',
+                    'error'  => 'friend not found'
+                ));
+        }
+
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+
     }
 
     public function deleteFriendAction(Request $request)
@@ -294,7 +342,10 @@ class ApiController extends Controller
             {
                 $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findUserByPhone($phone);
 
-                $phoneArraInSystem[] = array('phone' => $phone, 'id' => (!empty($user)) ? $user[0]['id'] : null );
+                $phoneArraInSystem[] = array(
+                    'phone' => $phone,
+                    'id' => (!empty($user)) ? $user[0]['id'] : null,
+                    'username' => (!empty($user)) ? $user[0]['username'] : null);
             }
 
             return new JsonResponse(array(
@@ -473,29 +524,19 @@ class ApiController extends Controller
 
     public function getStaticInfoAction(Request $request)
     {
-        $userId       = $request->get('user_id', false);
-        $session_hash = $request->get('session_hash', false);
+        $staticInfoCollection = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:StaticInfo')->findAll();
 
-        if($userId && $session_hash)
-        {
-            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
-            if($user->getSessionHash() !== $session_hash)
-                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
-
-            $staticInfoCollection = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:StaticInfo')->findAll();
-
-            foreach($staticInfoCollection as  $staticInfo)
-                return new JsonResponse(array(
-                        'status' => 'success',
-                        'static_info' => array(
-                            'about_reactr' => $staticInfo->getAboutReactr(),
-                            'privacy' => $staticInfo->getPrivacy(),
-                            'terms' => $staticInfo->getTerms(),
-                            'contact_us' => $staticInfo->getContactUs(),
-                            'how_it_works' => $staticInfo->getHowItWorks()
-                        ))
-                );
-        }
+        foreach($staticInfoCollection as  $staticInfo)
+            return new JsonResponse(array(
+                    'status' => 'success',
+                    'static_info' => array(
+                         'about_reactr' => $staticInfo->getAboutReactr(),
+                         'privacy' => $staticInfo->getPrivacy(),
+                         'terms' => $staticInfo->getTerms(),
+                         'contact_us' => $staticInfo->getContactUs(),
+                         'how_it_works' => $staticInfo->getHowItWorks()
+                    ))
+            );
 
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }

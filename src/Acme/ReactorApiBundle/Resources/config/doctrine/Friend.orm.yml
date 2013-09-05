@@ -11,6 +11,8 @@ Acme\ReactorApiBundle\Entity\Friend:
       type: integer
     friend_id:
       type: integer
+    blocked:
+      type: boolean
     created_at:
       type: datetime
   manyToOne:

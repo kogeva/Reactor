@@ -37,7 +37,7 @@ class UserRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery('
-                SELECT u.id
+                SELECT u.id, u.username
                 FROM AcmeReactorApiBundle:User u
                 WHERE u.phone = :phone'
             )->setParameter('phone', $phone)->getArrayResult();

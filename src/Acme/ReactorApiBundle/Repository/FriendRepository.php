@@ -23,11 +23,11 @@ class FriendRepository extends EntityRepository
             )->setParameter('id', $id)->getArrayResult();
     }
 
-    public function getIdFriens($id)
+    public function getIdAndBlockedFriends($id)
     {
         return $this->getEntityManager()
             ->createQuery('
-                SELECT  fr.friend_id
+                SELECT  fr.friend_id, fr.blocked
                 FROM AcmeReactorApiBundle:Friend fr
                 WHERE fr.user_id = :id'
             )->setParameter('id', $id)->getArrayResult();
