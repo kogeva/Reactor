@@ -73,6 +73,9 @@ class ApiController extends Controller
         {
             $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneByEmail($email);
 
+            if(!$user)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => 'Email not found'));
+
             if($user->getPassword() === md5($password))
             {
                 $user->setSessionHash(md5(time()));
@@ -86,7 +89,9 @@ class ApiController extends Controller
                     'status' => 'success',
                     'user_id' => $user->getId(),
                     'session_hash' => $user->getSessionHash(),
-                    'privacy_message' => $user->getPrivacyMessage()
+                    'privacy_message' => $user->getPrivacyMessage(),
+                    'username' => $user->getUsername,
+                    'phone' => $user->getPhone
                 ));
             }
             else
@@ -121,7 +126,7 @@ class ApiController extends Controller
     {
         $userId          = $request->get('user_id', false);
         $sessionHash     = $request->get('session_hash', false);
-        $email        = $request->get('email', false);
+        $email           = $request->get('email', false);
         $phone           = $request->get('phone', false);
 
         if($userId && $sessionHash)
@@ -230,7 +235,6 @@ class ApiController extends Controller
 
                 $friendIdsArray = array();
                 $isBlockedMe = null;
-
 
                 foreach($friendIds as $friendId)
                 {
