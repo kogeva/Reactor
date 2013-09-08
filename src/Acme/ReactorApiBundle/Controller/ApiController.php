@@ -38,6 +38,7 @@ class ApiController extends Controller
             $user->setPrivacyMessage(false);
             $user->setSessionHash(md5(time()));
             $user->setCreatedAt(new \DateTime());
+            $user->setBlocked(true);
 
             $validator = $this->get('validator');
             $errors =  $validator->validate($user);
