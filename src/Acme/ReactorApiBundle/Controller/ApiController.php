@@ -91,8 +91,8 @@ class ApiController extends Controller
                     'user_id' => $user->getId(),
                     'session_hash' => $user->getSessionHash(),
                     'privacy_message' => $user->getPrivacyMessage(),
-                    'username' => $user->getUsername,
-                    'phone' => $user->getPhone
+                    'username' => $user->getUsername(),
+                    'phone' => $user->getPhone()
                 ));
             }
             else
