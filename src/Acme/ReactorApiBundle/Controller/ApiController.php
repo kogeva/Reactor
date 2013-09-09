@@ -144,7 +144,7 @@ class ApiController extends Controller
                 if($existUser)
                     $errorArray[] = 'This email already exists in the system';
                 else
-                    $user->setUsername($email);
+                    $user->setEmail($email);
             }
 
             if($phone)
@@ -198,6 +198,7 @@ class ApiController extends Controller
                 $friend->setUserId($user->getId());
                 $friend->setFriendId($friendUser->getId());
                 $friend->setCreatedAt(new \DateTime());
+                $friend->setBlocked(false);
 
                 $em->persist($friend);
                 $em->flush();
