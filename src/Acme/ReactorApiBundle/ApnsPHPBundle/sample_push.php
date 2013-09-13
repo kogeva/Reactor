@@ -45,7 +45,7 @@ foreach($data as $entity)
 $token = $entity[0];
 $text = $entity[1];
 	$message = new ApnsPHP_Message($token);
-	$message->setCustomIdentifier("Message-Badge-3");
+	$message->setCustomIdentifier("Message-Badge-1");
 	$message->setBadge(3);
 	$message->setText($text);
 	$message->setSound();
