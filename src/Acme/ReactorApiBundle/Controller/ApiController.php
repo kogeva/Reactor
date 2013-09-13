@@ -462,7 +462,7 @@ class ApiController extends Controller
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($message);
                 $em->flush();
-                $pushNotificationDataIOS[] = array($friend_user->getDeviceToken(),'You have new message from '. $user->getUsername());
+                $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername());
 
                 $sendedMessages[] = $message->toArray();
             }
