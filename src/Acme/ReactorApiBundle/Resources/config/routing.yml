@@ -52,7 +52,7 @@ search_friends:
 
 block_friend:
   pattern: /blockFriend/
-  defaults: { _controller: AcmeReactorApiBundle:Api:blockFriend }
+  defaults: { _controller: AcmeReactorApiBundle:Api:setBlockFriend }
 
 delete_friend:
   pattern: /deleteFriend/
