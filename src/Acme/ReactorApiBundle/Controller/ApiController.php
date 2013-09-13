@@ -211,7 +211,13 @@ class ApiController extends Controller
                 );
             }
             else
+            {
+                $apns = new \ApnsPHP_Push_Server(
+                    \ApnsPHP_Abstract::ENVIRONMENT_SANDBOX,
+                    'reactr.pem');
                 die('die');
+            }
+
         }
 
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
@@ -413,7 +419,7 @@ class ApiController extends Controller
     {
         $userId       = $request->get('user_id', false);
         $session_hash = $request->get('session_hash', false);
-        $friend_ids    = $request->get('friend_ids', false);
+        $friend_ids   = $request->get('friend_ids', false);
         $text         = $request->get('text', '');
         $file         = $request->files->get('photo');
         $reactionFile = $request->files->get('reaction_photo', false);
@@ -466,6 +472,31 @@ class ApiController extends Controller
         }
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
 
+    }
+
+    public function countNotReadMessageAction(Request $request)
+    {
+
+        $userId       = $request->get('user_id', false);
+        $session_hash = $request->get('session_hash', false);
+
+        if($userId && $session_hash)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $session_hash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+            $em = $this->getDoctrine()->getEntityManager();
+
+
+            $countMessage = $em->getRepository('AcmeReactorApiBundle:Message')->countNotRead($userId);
+
+            return new JsonResponse(array(
+                    'status' => 'success',
+                    'count' => $countMessage
+                )
+            );
+        }
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }
 
     public function getMessagesAction(Request $request)

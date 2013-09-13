@@ -22,6 +22,10 @@ send_messages:
   pattern: /sendMessages/
   defaults: { _controller: AcmeReactorApiBundle:Api:sendMessages }
 
+countIsNotRead:
+  pattern: /countNotReadMessage/
+  defaults: { _controller: AcmeReactorApiBundle:Api:countNotReadMessage }
+
 get_messages:
   pattern: /getMessages/
   defaults: { _controller: AcmeReactorApiBundle:Api:getMessages }

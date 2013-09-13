@@ -40,4 +40,16 @@ class MessageRepository extends EntityRepository
                 ORDER BY ms.created_at DESC'
             )->setParameters(array('id' => $id, 'to_user' => $toUser))->getOneOrNullResult();
     }
+
+    public function countNotRead($userId)
+    {
+        $messages = $this->getEntityManager()
+                ->createQuery('
+                    SELECT ms.id
+                    FROM AcmeReactorApiBundle:Message ms
+                    WHERE ms.to_user = :user_id
+                      AND ms.is_read IS NULL'
+                )->setParameters(array('user_id' => $userId))->getArrayResult();
+        return count($messages);
+    }
 }

@@ -16,7 +16,7 @@ class FriendRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery('
-                SELECT  u.id, u.username, u.phone, u.privacy_message
+                SELECT  u.id, u.username, u.phone, u.privacy_message, fr.blocked
                 FROM AcmeReactorApiBundle:Friend fr
                 JOIN fr.user u
                 WHERE fr.user_id = :id'
