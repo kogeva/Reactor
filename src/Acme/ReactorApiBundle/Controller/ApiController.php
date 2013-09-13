@@ -275,7 +275,7 @@ class ApiController extends Controller
         $friendId    = $request->get('friend_id', false);
         $blocked     = $request->get('set_block', false);
 
-        if($userId && $sessionHash && $friendId && $blocked)
+        if($userId && $sessionHash && $friendId)
         {
             $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
             if($user->getSessionHash() !== $sessionHash)
