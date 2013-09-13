@@ -442,6 +442,8 @@ class ApiController extends Controller
 
             $sendedMessages = array();
 
+            $pushNotificationDataIOS = array();
+
             foreach($friends as $friend_id)
             {
                 $friend_user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($friend_id);
@@ -460,9 +462,12 @@ class ApiController extends Controller
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($message);
                 $em->flush();
+                $pushNotificationDataIOS[] = array($friend_user->getDeviceToken(),'You have new message from '. $user->getUsername());
 
                 $sendedMessages[] = $message->toArray();
             }
+
+            exec("php ".__DIR__."../ApnsPHPBundle/sample_push.php '".serialize($pushNotificationDataIOS) ."' > /dev/null &");
 
             return new JsonResponse(array(
                     'status' => 'success',
