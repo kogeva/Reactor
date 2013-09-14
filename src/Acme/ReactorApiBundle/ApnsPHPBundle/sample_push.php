@@ -46,15 +46,14 @@ $token = $entity[0];
 $text = $entity[1];
 	$message = new ApnsPHP_Message($token);
 	$message->setCustomIdentifier("Message-Badge-1");
-	$message->setBadge(3);
+//	$message->setBadge(1);
 	$message->setText($text);
 	$message->setSound();
-	$message->setCustomProperty('acme2', array('bang', 'whiz'));
-	$message->setCustomProperty('acme3', array('bing', 'bong'));
+//	$message->setCustomProperty('acme2', array('bang', 'whiz'));
+//	$message->setCustomProperty('acme3', array('bing', 'bong'));
 	$message->setExpiry(30);
 	$push->add($message);
 	$push->send();
-
 }
 $push->disconnect();
 $aErrorQueue = $push->getErrors();
