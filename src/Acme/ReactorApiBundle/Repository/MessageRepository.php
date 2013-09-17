@@ -52,4 +52,14 @@ class MessageRepository extends EntityRepository
                 )->setParameters(array('user_id' => $userId))->getArrayResult();
         return count($messages);
     }
+
+    public function deleteOldMessages()
+    {
+        $messages = $this->getEntityManager()
+                ->createQuery('
+                    DELETE AcmeReactorApiBundle:Message ms
+                    WHERE ms.created_at <= :date ')
+                ->setParameter('date', new \DateTime('-7 day'));
+        $messages->getResult();
+    }
 }

@@ -26,7 +26,6 @@ class ApiController extends Controller
         $phone       = $request->get('phone', false);
         $deviceToken = $request->get('device_token', false);
 
-
         if($userName && $email && $password && $phone && $deviceToken)
         {
             $user = new User();
@@ -53,6 +52,23 @@ class ApiController extends Controller
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($user);
             $em->flush();
+
+            //Sending an email
+            $staticInfo = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:StaticInfo')->findAll();
+            $info = $staticInfo[0];
+            $email_message = \Swift_Message::newInstance()
+                ->setSubject($info->getEmailSubject())
+                ->setFrom(array('blogsymfony@gmail.com' => 'Reactr'))
+                ->setTo($email)
+                ->setBody(
+                    $this->renderView('AcmeReactorApiBundle:Api:email.html.twig',
+                        array('username' => $userName,
+                            'password' => $password,
+                            'staticInfo' => $info)),'text/html'
+                );
+
+            $this->get('mailer')->send($email_message);
+
             return new JsonResponse(array(
                 'status'       => 'success',
                 'user_id'      => $user->getId(),
@@ -461,7 +477,10 @@ class ApiController extends Controller
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($message);
                 $em->flush();
-                $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername());
+
+                $countNotReadMessage = $em->getRepository('AcmeReactorApiBundle:Message')->countNotRead($friend_id);
+                $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
+                    'Not read messages : ' . $countNotReadMessage);
 
                 $sendedMessages[] = $message->toArray();
             }

@@ -16,3 +16,8 @@ Acme\ReactorApiBundle\Entity\StaticInfo:
       type: text
     how_it_works:
       type: text
+    email_body:
+      type: text
+    email_subject:
+      type: string
+      length: 30

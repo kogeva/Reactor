@@ -8,10 +8,16 @@ Acme\ReactorApiBundle\Entity\User:
               fields: [ email ]
               errorPath: email
               message: This email exist in system
+          - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [ phone ]
+              errorPath: phone
+              message: This phone exist in system
   properties:
           username:
               - NotBlank: ~
           email:
               - Email: ~
+          phone:
+              - NotBlank: ~
 #  constraints:
 #          - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username

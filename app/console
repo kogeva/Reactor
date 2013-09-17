@@ -13,6 +13,9 @@ require_once __DIR__.'/AppKernel.php';
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
+use Symfony\Component\Console\Application as App;
+use Acme\ReactorApiBundle\Command\DeleteCommand;
+
 
 $input = new ArgvInput();
 $env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
@@ -25,3 +28,7 @@ if ($debug) {
 $kernel = new AppKernel($env, $debug);
 $application = new Application($kernel);
 $application->run($input);
+
+$application = new App();
+$application->add(new DeleteCommand());
+$application->run();
