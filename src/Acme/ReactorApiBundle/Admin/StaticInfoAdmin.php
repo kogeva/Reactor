@@ -19,7 +19,8 @@ class StaticInfoAdmin extends Admin
             ->add('terms')
             ->add('contact_us')
             ->add('how_it_works')
-            ->add('email')
+            ->add('email_body')
+            ->add('email_subject')
         ;
     }
 
@@ -31,7 +32,8 @@ class StaticInfoAdmin extends Admin
             ->add('Terms')
             ->add('Contact Us')
             ->add('How It Works')
-            ->add('email')
+            ->add('email_body')
+            ->add('email_subject')
         ;
     }
 }
