@@ -20,7 +20,7 @@ Acme\ReactorApiBundle\Entity\User:
       length: 255
     phone:
       type: integer
-      lenghth: 12
+      length: 12
     device_token:
       type: string
       length: 256
