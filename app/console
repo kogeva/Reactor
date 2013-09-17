@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Console\Application as App;
-use Acme\ReactorApiBundle\Command\GreetCommand;
+use Acme\ReactorApiBundle\Command\DeleteCommand;
 
 
 $input = new ArgvInput();
@@ -30,5 +30,5 @@ $application = new Application($kernel);
 $application->run($input);
 
 $application = new App();
-$application->add(new GreetCommand);
+$application->add(new DeleteCommand());
 $application->run();
