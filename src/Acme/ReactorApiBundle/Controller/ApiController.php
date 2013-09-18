@@ -28,52 +28,52 @@ class ApiController extends Controller
 
         if($userName && $email && $password && $phone && $deviceToken)
         {
-            $user = new User();
-            $user->setUsername($userName);
-            $user->setEmail($email);
-            $user->setPassword(md5($password));
-            $user->setPhone($phone);
-            $user->setDeviceToken($deviceToken);
-            $user->setPrivacyMessage(false);
-            $user->setSessionHash(md5(time()));
-            $user->setCreatedAt(new \DateTime());
+                $user = new User();
+                $user->setUsername($userName);
+                $user->setEmail($email);
+                $user->setPassword(md5($password));
+                $user->setPhone($phone);
+                $user->setDeviceToken($deviceToken);
+                $user->setPrivacyMessage(false);
+                $user->setSessionHash(md5(time()));
+                $user->setCreatedAt(new \DateTime());
 
-            $validator = $this->get('validator');
-            $errors =  $validator->validate($user);
+                $validator = $this->get('validator');
+                $errors =  $validator->validate($user);
 
-            if(count($errors))
-            {
-                $messages = array();
-                foreach($errors as $error)
-                    $messages[$error->getPropertyPath()] = $error->getMessage();
-                return new JsonResponse(array( 'status' => 'failed', 'errors' => $messages));
-            }
+                if(count($errors))
+                {
+                    $messages = array();
+                    foreach($errors as $error)
+                        $messages[$error->getPropertyPath()] = $error->getMessage();
+                    return new JsonResponse(array( 'status' => 'failed', 'errors' => $messages));
+                }
 
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($user);
-            $em->flush();
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($user);
+                $em->flush();
 
-            //Sending an email
-            $staticInfo = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:StaticInfo')->findAll();
-            $info = $staticInfo[0];
-            $email_message = \Swift_Message::newInstance()
-                ->setSubject($info->getEmailSubject())
-                ->setFrom(array('blogsymfony@gmail.com' => 'Reactr'))
-                ->setTo($email)
-                ->setBody(
-                    $this->renderView('AcmeReactorApiBundle:Api:email.html.twig',
-                        array('username' => $userName,
-                            'password' => $password,
-                            'staticInfo' => $info)),'text/html'
-                );
+                //Sending an email
+                $staticInfo = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:StaticInfo')->findAll();
+                $info = $staticInfo[0];
+                $email_message = \Swift_Message::newInstance()
+                    ->setSubject($info->getEmailSubject())
+                    ->setFrom(array('blogsymfony@gmail.com' => 'Reactr'))
+                    ->setTo($email)
+                    ->setBody(
+                        $this->renderView('AcmeReactorApiBundle:Api:email.html.twig',
+                            array('username' => $userName,
+                                'password' => $password,
+                                'staticInfo' => $info)),'text/html'
+                    );
 
-            $this->get('mailer')->send($email_message);
+                $this->get('mailer')->send($email_message);
 
-            return new JsonResponse(array(
-                'status'       => 'success',
-                'user_id'      => $user->getId(),
-                'session_hash' => $user->getSessionHash()
-            ));
+                return new JsonResponse(array(
+                    'status'       => 'success',
+                    'user_id'      => $user->getId(),
+                    'session_hash' => $user->getSessionHash()
+                ));
         }
         else
             return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required fields is empty'));
