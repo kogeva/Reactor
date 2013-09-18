@@ -19,7 +19,7 @@ Acme\ReactorApiBundle\Entity\User:
       type: string
       length: 255
     phone:
-      type: integer
+      type: bigint
       length: 12
     device_token:
       type: string
@@ -27,7 +27,7 @@ Acme\ReactorApiBundle\Entity\User:
       nullable: true
     session_hash:
       type: string
-      lenghth: 255
+      length: 255
       nullable: true
     privacy_message:
       type: boolean
