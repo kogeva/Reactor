@@ -68,12 +68,12 @@ doctrine:
 
 swiftmailer:
     transport: smtp
-    encryption: ssl
+#    encryption: ssl
     auth_mode: login
-    host:      smtp.reactrapp.com
+    host:      reactrapp.com
     username:  no-reply@reactrapp.com
     password:  no-reply
-    port: 465
+    port: 25
     spool:     { type: memory }
 
 sonata_block:
