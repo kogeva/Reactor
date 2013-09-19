@@ -2,7 +2,7 @@
 {% block content %}
 
     {% block body %}
-        {{ staticInfo.emailBody }} <br><br>
+        {{ staticInfo.emailBody | raw }} <br><br>
         <p> <b>Your username :</b> {{ username }} </p>
         <p> <b>Your password :</b> {{ password }} </p>
     {% endblock %}
