@@ -58,7 +58,7 @@ class ApiController extends Controller
                 $info = $staticInfo[0];
                 $email_message = \Swift_Message::newInstance()
                     ->setSubject($info->getEmailSubject())
-                    ->setFrom(array('blogsymfony@gmail.com' => 'Reactr'))
+                    ->setFrom(array('no-reply@reactrapp.com' => 'Reactr'))
                     ->setTo($email)
                     ->setBody(
                         $this->renderView('AcmeReactorApiBundle:Api:email.html.twig',
