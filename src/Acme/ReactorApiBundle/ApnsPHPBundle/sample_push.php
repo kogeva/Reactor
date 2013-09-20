@@ -45,12 +45,21 @@ foreach($data as $entity)
 $token = $entity[0];
 $text = $entity[1];
 $notRead = $entity[2];
+$messageId = $entity[3];
+$photo = $entity[4];
+$text = $entity[5];
+$userId = $entity[6];
+
 	$message = new ApnsPHP_Message($token);
 	$message->setCustomIdentifier("Message-Badge-1");
 	$message->setBadge($notRead);
 	$message->setText($text);
 	$message->setSound();
-//	$message->setCustomProperty('acme2', array('bang', 'whiz'));
+	$message->setCustomProperty('message_id', $messageId);
+	$message->setCustomProperty('photoLink', $photo);
+	$message->setCustomProperty('text', $text);
+	$message->setCustomProperty('user_id', $userId);
+
 //	$message->setCustomProperty('acme3', array('bing', 'bong'));
 	$message->setExpiry(30);
 	$push->add($message);
