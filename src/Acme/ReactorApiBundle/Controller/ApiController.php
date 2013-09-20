@@ -479,8 +479,11 @@ class ApiController extends Controller
                 $em->flush();
 
                 $countNotReadMessage = $em->getRepository('AcmeReactorApiBundle:Message')->countNotRead($friend_id);
+                $photo = $message->getPhoto();
+                if ($text)
+                    $message_text = $text;
                 $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
-                                                    $countNotReadMessage);
+                                                    $countNotReadMessage, $message->getId(), $photo, $text, $userId);
 
                 $sendedMessages[] = $message->toArray();
             }
