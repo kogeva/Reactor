@@ -48,7 +48,7 @@ $notRead = $entity[2];
 $messageId = $entity[3];
 $photo = $entity[4];
 $reactionPhoto = $entity[5];
-$text = $entity[6];
+$messageText = $entity[6];
 $userId = $entity[7];
 
 	$message = new ApnsPHP_Message($token);
@@ -59,7 +59,7 @@ $userId = $entity[7];
 	$message->setCustomProperty('message_id', $messageId);
 	$message->setCustomProperty('photoLink', $photo);
 	$message->setCustomProperty('reactionPhotoLink', $reactionPhoto);
-	$message->setCustomProperty('text', $text);
+	$message->setCustomProperty('text', $messageText);
 	$message->setCustomProperty('user_id', $userId);
 
 //	$message->setCustomProperty('acme3', array('bing', 'bong'));
