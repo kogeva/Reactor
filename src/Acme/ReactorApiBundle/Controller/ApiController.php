@@ -469,7 +469,11 @@ class ApiController extends Controller
                 $message->setPhoto($this->generateSrcImage($filename));
                 $message->setText($text);
                 if($reactionFile)
+                {
                     $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
+                    $reactionPhoto = $message->getReactionPhoto();
+                }
+
                 $message->setUser($friend_user);
                 $message->setFrom($user);
                 $message->setCreatedAt(new \DateTime());
@@ -482,8 +486,9 @@ class ApiController extends Controller
                 $photo = $message->getPhoto();
                 if ($text)
                     $message_text = $text;
+
                 $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
-                                                    $countNotReadMessage, $message->getId(), $photo, $text, $userId);
+                                                    $countNotReadMessage, $message->getId(), $photo, $reactionPhoto, $text, $userId);
 
                 $sendedMessages[] = $message->toArray();
             }

@@ -47,8 +47,9 @@ $text = $entity[1];
 $notRead = $entity[2];
 $messageId = $entity[3];
 $photo = $entity[4];
-$text = $entity[5];
-$userId = $entity[6];
+$reactionPhoto = $entity[5];
+$text = $entity[6];
+$userId = $entity[7];
 
 	$message = new ApnsPHP_Message($token);
 	$message->setCustomIdentifier("Message-Badge-1");
@@ -57,6 +58,7 @@ $userId = $entity[6];
 	$message->setSound();
 	$message->setCustomProperty('message_id', $messageId);
 	$message->setCustomProperty('photoLink', $photo);
+	$message->setCustomProperty('reactionPhotoLink', $reactionPhoto);
 	$message->setCustomProperty('text', $text);
 	$message->setCustomProperty('user_id', $userId);
 
