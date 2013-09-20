@@ -67,7 +67,7 @@ doctrine:
 #    spool:     { type: memory }
 
 swiftmailer:
-    transport: smtp
+    transport: sendmail
 #    encryption: ssl
     auth_mode: login
     host:      reactrapp.com
