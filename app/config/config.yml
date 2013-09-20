@@ -68,7 +68,6 @@ doctrine:
 
 swiftmailer:
     transport: sendmail
-#    encryption: ssl
     auth_mode: login
     host:      reactrapp.com
     username:  no-reply@reactrapp.com
