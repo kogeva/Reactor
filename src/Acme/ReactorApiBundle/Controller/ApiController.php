@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ApiController extends Controller
 {
+    const WEEK = 7;
     public function indexAction($name)
     {
         var_dump($this->getRequest()->files) or die;
@@ -541,8 +542,15 @@ class ApiController extends Controller
 
             $em = $this->getDoctrine()->getEntityManager();
             $messages = $em->getRepository('AcmeReactorApiBundle:Message')->findAllByUserId($userId, $from, $to - $from);
+
+            $currentDate = new \DateTime("now");
+
             foreach($messages as $key => $value)
             {
+                $interval = $currentDate->diff($value['created_at']);
+
+                $messages[$key]['deleted'] = ($interval->d > self::WEEK) ? true : false ;
+
                 if($value['from_user'] == $userId)
                     $messages[$key]['from_me'] = true;
                 else

@@ -289,4 +289,60 @@ class Message
             'text'           => $this->text
         );
     }
+    /**
+     * @var \Acme\ReactorApiBundle\Entity\User
+     */
+    private $shipping;
+
+
+    /**
+     * Set shipping
+     *
+     * @param \Acme\ReactorApiBundle\Entity\User $shipping
+     * @return Message
+     */
+    public function setShipping(\Acme\ReactorApiBundle\Entity\User $shipping = null)
+    {
+        $this->shipping = $shipping;
+    
+        return $this;
+    }
+
+    /**
+     * Get shipping
+     *
+     * @return \Acme\ReactorApiBundle\Entity\User 
+     */
+    public function getShipping()
+    {
+        return $this->shipping;
+    }
+    /**
+     * @var \Acme\ReactorApiBundle\Entity\User
+     */
+    private $to;
+
+
+    /**
+     * Set to
+     *
+     * @param \Acme\ReactorApiBundle\Entity\User $to
+     * @return Message
+     */
+    public function setTo(\Acme\ReactorApiBundle\Entity\User $to = null)
+    {
+        $this->to = $to;
+    
+        return $this;
+    }
+
+    /**
+     * Get to
+     *
+     * @return \Acme\ReactorApiBundle\Entity\User 
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
 }

@@ -16,12 +16,12 @@ class MessageRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery('
-                SELECT ms.id, ms.from_user, ms.to_user, ms.text, ms.photo, ms.reaction_photo, ms.is_read, ms.created_at, u.username
+                SELECT ms.id, ms.from_user, ms.to_user, ms.text, ms.photo, ms.reaction_photo, ms.is_read, ms.created_at, u.username, (ut.username) AS to_username
                 FROM AcmeReactorApiBundle:Message ms
                 LEFT JOIN ms.from u
+                LEFT JOIN ms.to ut
                 WHERE ms.to_user = :id
                   OR ms.from_user = :id
-
                 ORDER BY ms.created_at DESC'
             )
             ->setFirstResult($from)

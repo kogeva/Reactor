@@ -27,13 +27,11 @@ Acme\ReactorApiBundle\Entity\Message:
     created_at:
       type: datetime
   manyToOne:
-      user:
+      to:
         targetEntity: User
-        inversedBy: messages
         joinColumn:
           name: to_user
           referencedColumnName: id
-  manyToOne:
       from:
         targetEntity: User
         joinColumn:
