@@ -71,7 +71,7 @@ swiftmailer:
     auth_mode: login
     host:      reactrapp.com
     username:  no-reply@reactrapp.com
-    password:  no-reply
+    password:  no-reaply
     port: 25
     spool:     { type: memory }
 
