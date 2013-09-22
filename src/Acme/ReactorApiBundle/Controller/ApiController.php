@@ -459,7 +459,6 @@ class ApiController extends Controller
             $sendedMessages = array();
 
             $pushNotificationDataIOS = array();
-
             foreach($friends as $friend_id)
             {
                 $friend_user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($friend_id);
@@ -474,7 +473,7 @@ class ApiController extends Controller
                     $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
                     $reactionPhoto = $message->getReactionPhoto();
                 }
-                $message->setUser($friend_user);
+                $message->setTo($friend_user);
                 $message->setFrom($user);
                 $message->setCreatedAt(new \DateTime());
 
