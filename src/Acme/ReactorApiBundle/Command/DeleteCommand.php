@@ -31,13 +31,18 @@ class DeleteCommand extends ContainerAwareCommand
         foreach($photos as $photo)
         {
             $photoPath = $photo->getPhoto();
+            $reactionPhotoPath = $photo->getReactionPhoto();
+            $reactionPhoto = explode('images',$photoPath);
             $photoName = explode('images',$photoPath);
-            if (isset($photoName[1]) && $photoName[1] !== null)
+            if (isset($photoName[1]))
             {
-                $path = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images' . $photoName[1];
-                $em->getRepository('AcmeReactorApiBundle:Message')->updateDeletedPhoto();
-                $output->writeln(var_dump($path));
-                $fs->remove($path);
+                $photoPath = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images' . $photoName[1];
+                $fs->remove($photoPath);
+            }
+            if (isset($reactionPhoto[1]))
+            {
+                $ReactionPhotoPath = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images' . $reactionPhoto[1];
+                $fs->remove($ReactionPhotoPath);
             }
         }
     }
