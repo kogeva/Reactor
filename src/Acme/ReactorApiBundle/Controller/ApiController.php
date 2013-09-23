@@ -468,6 +468,7 @@ class ApiController extends Controller
                 $message->setToUser($friend_id);
                 $message->setPhoto($this->generateSrcImage($filename));
                 $message->setText($text);
+
                 $reactionPhoto = 'none';
                 if($reactionFile)
                 {
