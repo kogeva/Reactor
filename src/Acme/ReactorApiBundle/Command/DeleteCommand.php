@@ -24,18 +24,21 @@ class DeleteCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-      $em = $this->getContainer()->get('doctrine');
-      $photos = $em->getRepository('AcmeReactorApiBundle:Message')->deleteOldPhotos();
-      $fs = new Filesystem();
+        $em = $this->getContainer()->get('doctrine');
+        $photos = $em->getRepository('AcmeReactorApiBundle:Message')->deleteOldPhotos();
+        $fs = new Filesystem();
 
-      foreach($photos as $photo)
-      {
-          $photoPath = $photo->getPhoto();
-          $photoName = explode('images',$photoPath);
-          $path = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images' . $photoName[1];
-          $output->writeln(var_dump($path));
-         // $fs->remove($path);
-
-      }
+        foreach($photos as $photo)
+        {
+            $photoPath = $photo->getPhoto();
+            $photoName = explode('images',$photoPath);
+            if (isset($photoName[1]) && $photoName[1] !== null)
+            {
+                $path = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images' . $photoName[1];
+                $em->getRepository('AcmeReactorApiBundle:Message')->updateDeletedPhoto();
+                $output->writeln(var_dump($path));
+                $fs->remove($path);
+            }
+        }
     }
 }
