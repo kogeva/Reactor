@@ -550,7 +550,7 @@ class ApiController extends Controller
             {
                 $interval = $currentDate->diff($value['created_at']);
 
-                $messages[$key]['deleted'] = ($interval->d > self::WEEK) ? true : false ;
+                $messages[$key]['deleted'] = 1;//($interval->d > self::WEEK) ? true : false ;
 
                 if($value['from_user'] == $userId)
                     $messages[$key]['from_me'] = true;
