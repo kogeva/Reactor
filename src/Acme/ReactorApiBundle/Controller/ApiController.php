@@ -471,6 +471,7 @@ class ApiController extends Controller
                 if($reactionFile)
                 {
                     $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
+                    $reactionPhoto = $message->getReactionPhoto();
                 }
                 $message->setTo($friend_user);
                 $message->setFrom($user);
@@ -482,10 +483,6 @@ class ApiController extends Controller
 
                 $countNotReadMessage = $em->getRepository('AcmeReactorApiBundle:Message')->countNotRead($friend_id);
                 $photo = $message->getPhoto();
-                if ($message->getReactionPhoto())
-                {
-                    $reactionPhoto = $message->getReactionPhoto();
-                }
 
                 $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
                                                     $countNotReadMessage, $message->getId(), $photo, $reactionPhoto, $message->getText(), $userId);
