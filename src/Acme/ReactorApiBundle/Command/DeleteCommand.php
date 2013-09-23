@@ -33,7 +33,9 @@ class DeleteCommand extends ContainerAwareCommand
           $photoPath = $photo->getPhoto();
           $photoName = explode('images',$photoPath);
           $path = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images' . $photoName[1];
-          $fs->remove($path);
+          $output->writeln(var_dump($path));
+         // $fs->remove($path);
+
       }
     }
 }
