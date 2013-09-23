@@ -30,10 +30,10 @@ class DeleteCommand extends ContainerAwareCommand
 
       foreach($photos as $photo)
       {
-          $photoPath = $photo->getPhoto();
-          $photoName = explode('images',$photoPath);
-          $path = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images/' . $photoName[1];
-          $fs->remove($path);
+         // $photoPath = $photo->getPhoto();
+         // $photoName = explode('images',$photoPath);
+         // $path = $this->getContainer()->get('kernel')->getRootDir(). '/../web/images/' . $photoName[1];
+          $fs->remove($photo->getPhoto());
       }
     }
 }
