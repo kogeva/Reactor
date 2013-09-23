@@ -53,13 +53,13 @@ class MessageRepository extends EntityRepository
         return count($messages);
     }
 
-    public function deleteOldMessages()
+    public function deleteOldPhotos()
     {
         $messages = $this->getEntityManager()
                 ->createQuery('
-                    DELETE AcmeReactorApiBundle:Message ms
+                    SELECT ms FROM AcmeReactorApiBundle:Message ms
                     WHERE ms.created_at <= :date ')
                 ->setParameter('date', new \DateTime('-7 day'));
-        $messages->getResult();
+        return $messages->getResult();
     }
 }
