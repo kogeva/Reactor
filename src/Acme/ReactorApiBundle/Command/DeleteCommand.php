@@ -32,7 +32,8 @@ class DeleteCommand extends ContainerAwareCommand
         {
             $photoPath = $photo->getPhoto();
             $reactionPhotoPath = $photo->getReactionPhoto();
-            $reactionPhoto = explode('images',$photoPath);
+
+            $reactionPhoto = explode('images',$reactionPhotoPath);
             $photoName = explode('images',$photoPath);
             if (isset($photoName[1]))
             {
