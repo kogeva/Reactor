@@ -47,7 +47,7 @@ $text = $entity[1];
 $notRead = $entity[2];
 $messageId = $entity[3];
 $photo = $entity[4];
-//$reactionPhoto = $entity[5];
+$reactionPhoto = $entity[5];
 $messageText = $entity[6];
 $userId = $entity[7];
 
@@ -58,7 +58,7 @@ $userId = $entity[7];
 	$message->setSound();
 	$message->setCustomProperty('message_id', $messageId);
 	$message->setCustomProperty('photoLink', $photo);
-	//$message->setCustomProperty('reactionPhotoLink', $reactionPhoto);
+	$message->setCustomProperty('reactionPhotoLink', $reactionPhoto);
 	$message->setCustomProperty('text', $messageText);
 	$message->setCustomProperty('user_id', $userId);
 
