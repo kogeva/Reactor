@@ -561,11 +561,11 @@ class ApiController extends Controller
                     $em->persist($value);
                     $em->flush();
 
-                    return true;
+                    $messages[$key]['deleted']= true;
                 }
                 else
                 {
-                    return false;
+                    $messages[$key]['deleted'] = false;
                 }
 
                 if($value['from_user'] == $userId)
