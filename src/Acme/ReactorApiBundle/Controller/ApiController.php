@@ -565,7 +565,7 @@ class ApiController extends Controller
                 }
                 else
                 {
-                    $messages[$key]['deleted'] = false;
+                    $messages[$key]['deleted']= false;
                 }
 
                 if($value['from_user'] == $userId)
