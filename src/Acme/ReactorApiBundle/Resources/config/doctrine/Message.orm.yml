@@ -26,6 +26,10 @@ Acme\ReactorApiBundle\Entity\Message:
       nullable: true
     created_at:
       type: datetime
+    deletedByTo:
+      type: integer
+    deletedByFrom:
+      type: integer
   manyToOne:
       to:
         targetEntity: User

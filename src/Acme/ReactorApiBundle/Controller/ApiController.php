@@ -5,6 +5,7 @@ namespace Acme\ReactorApiBundle\Controller;
 use Acme\ReactorApiBundle\Entity\Friend;
 use Acme\ReactorApiBundle\Entity\Message;
 use Acme\ReactorApiBundle\Entity\User;
+use Acme\ReactorApiBundle\Entity\DeletedMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -468,6 +469,8 @@ class ApiController extends Controller
                 $message->setToUser($friend_id);
                 $message->setPhoto($this->generateSrcImage($filename));
                 $message->setText($text);
+                $message->setDeletedByFrom('none');
+                $message->setDeletedByTo('none');
 
                 $reactionPhoto = 'none';
                 if($reactionFile)
@@ -552,8 +555,6 @@ class ApiController extends Controller
             {
                 $interval = $currentDate->diff($value['created_at']);
                 $messages[$key]['deleted'] = ($interval->d > self::WEEK) ? true : false ;
-
-
 
                 if($value['from_user'] == $userId)
                     $messages[$key]['from_me'] = true;
@@ -649,4 +650,37 @@ class ApiController extends Controller
         return 'http://'.$this->getRequest()->getHost().'/images/'.$filename;
     }
 
+    public function deleteMessageAction(Request $request)
+    {
+        $userId       = $request->get('user_id', false);
+        $session_hash = $request->get('session_hash', false);
+        $messageId    = $request->get('message_id', false);
+
+        if ($userId && $session_hash && $messageId)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $session_hash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $message = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Message')->find($messageId);
+
+            if($message)
+            {
+                if ($message->getFromUser() == $userId)
+                    $message->setDeletedByFrom($userId);
+                else
+                    $message->setDeletedByTo($userId);
+            }
+            else
+                return new JsonResponse(array('status' => 'failed', 'error' => 'message not found in system'));
+
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($message);
+            $em->flush();
+
+            return new JsonResponse(array('status' => 'success'));
+        }
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
 }
