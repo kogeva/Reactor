@@ -30,6 +30,7 @@ Acme\ReactorApiBundle\Entity\Message:
       type: integer
     deletedByFrom:
       type: integer
+
   manyToOne:
       to:
         targetEntity: User
