@@ -69,21 +69,6 @@ class Message
      */
     private $from;
 
-
-    public function toArray()
-    {
-        return array(
-            'id'             => $this->id,
-            'from_user'      => $this->from_user,
-            'to_user'        => $this->to_user,
-            'photo'          => $this->photo,
-            'reaction_photo' => $this->reaction_photo,
-            'created_at'     => $this->created_at->format('Y-m-d H:i:s'),
-            'text'           => $this->text
-        );
-    }
-
-
     /**
      * Get id
      *
@@ -232,6 +217,18 @@ class Message
         return $this->is_read;
     }
 
+    public function toArray()
+    {
+        return array(
+            'id'             => $this->id,
+            'from_user'      => $this->from_user,
+            'to_user'        => $this->to_user,
+            'photo'          => $this->photo,
+            'reaction_photo' => $this->reaction_photo,
+            'created_at'     => $this->created_at->format('Y-m-d H:i:s'),
+            'text'           => $this->text
+        );
+    }
     /**
      * Set created_at
      *
