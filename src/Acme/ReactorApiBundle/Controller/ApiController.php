@@ -468,7 +468,6 @@ class ApiController extends Controller
                 $message->setToUser($friend_id);
                 $message->setPhoto($this->generateSrcImage($filename));
                 $message->setText($text);
-                $message->setDeletedBy(null);
 
                 $reactionPhoto = 'none';
                 if($reactionFile)
@@ -650,32 +649,4 @@ class ApiController extends Controller
         return 'http://'.$this->getRequest()->getHost().'/images/'.$filename;
     }
 
-    public function deleteMessageAction(Request $request)
-    {
-        $userId       = $request->get('user_id', false);
-        $session_hash = $request->get('session_hash', false);
-        $messageId    = $request->get('message_id', false);
-
-        if ($userId && $session_hash && $messageId)
-        {
-            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
-            if($user->getSessionHash() !== $session_hash)
-                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
-
-            $message = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Message')->find($messageId);
-
-            if($message)
-            {
-                $message->setDeletedBy($userId);
-
-                $em = $this->getDoctrine()->getEntityManager();
-                $em->persist($message);
-                $em->flush();
-
-                return new JsonResponse(array('status' => 'success'));
-            }
-            return new JsonResponse(array( 'status' => 'failed', 'error' => 'message not found in system'));
-        }
-        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
-    }
 }
