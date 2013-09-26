@@ -554,16 +554,7 @@ class ApiController extends Controller
                 $interval = $currentDate->diff($value['created_at']);
                 $messages[$key]['deleted'] = ($interval->d > self::WEEK) ? true : false ;
 
-                if ($interval->d > self::WEEK)
-                {
-                    $value->setIsRead(true);
-                    $em = $this->getDoctrine()->getEntityManager();
-                    $em->persist($value);
-                    $em->flush();
-                    $messages[$key]['deleted'] = true;
-                }
-                else
-                    $messages[$key]['deleted'] = false;
+
 
                 if($value['from_user'] == $userId)
                     $messages[$key]['from_me'] = true;
