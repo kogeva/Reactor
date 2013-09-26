@@ -559,7 +559,6 @@ class ApiController extends Controller
                     $em = $this->getDoctrine()->getEntityManager();
                     $em->persist($value);
                     $em->flush();
-
                     $messages[$key]['deleted'] = true;
                 }
                 else
