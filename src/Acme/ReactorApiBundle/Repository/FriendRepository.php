@@ -53,4 +53,14 @@ class FriendRepository extends EntityRepository
                 WHERE fr.user_id = :user_id AND fr.friend_id = :friend_id '
             )->setParameters(array('user_id' => $userId, 'friend_id' => $friendId))->getArrayResult();
     }
+
+    public function findOneByFriendId($friendId, $userId)
+    {
+        return $this->getEntityManager()
+            ->createQuery('
+                SELECT  fr
+                FROM AcmeReactorApiBundle:Friend fr
+                WHERE fr.user_id = :user_id AND fr.friend_id = :friend_id '
+            )->setParameters(array('user_id' => $userId, 'friend_id' => $friendId))->getSingleResult();
+    }
 }

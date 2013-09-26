@@ -299,7 +299,7 @@ class ApiController extends Controller
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
             /** @var $friend Friend */
-            $friend = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->findOneBy(array('friend_id' => $friendId));
+            $friend = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->findOneByFriendId($friendId, $userId);
 
             if($friend)
             {
