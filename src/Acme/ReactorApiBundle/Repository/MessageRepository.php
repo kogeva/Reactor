@@ -22,7 +22,6 @@ class MessageRepository extends EntityRepository
                 LEFT JOIN ms.to ut
                 WHERE ms.to_user = :id
                   OR ms.from_user = :id
-                AND ms.deleted not like u.id
                 ORDER BY ms.created_at DESC'
             )
             ->setFirstResult($from)
