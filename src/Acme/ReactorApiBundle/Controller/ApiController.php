@@ -679,6 +679,7 @@ class ApiController extends Controller
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }
 
+
     private function generateSrcImage($filename)
     {
         return 'http://'.$this->getRequest()->getHost().'/images/'.$filename;
