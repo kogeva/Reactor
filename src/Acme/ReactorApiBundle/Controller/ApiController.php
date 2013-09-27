@@ -670,16 +670,16 @@ class ApiController extends Controller
                     $message->setDeletedByFrom($userId);
                 else
                     $message->setDeletedByTo($userId);
+
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($message);
+                $em->flush();
+
+                return new JsonResponse(array('status' => 'success'));
             }
             else
                 return new JsonResponse(array('status' => 'failed', 'error' => 'message not found in system'));
 
-
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($message);
-            $em->flush();
-
-            return new JsonResponse(array('status' => 'success'));
         }
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }
