@@ -645,11 +645,6 @@ class ApiController extends Controller
         return new JsonResponse(array( 'status' => 'failed'));
     }
 
-    private function generateSrcImage($filename)
-    {
-        return 'http://'.$this->getRequest()->getHost().'/images/'.$filename;
-    }
-
     public function deleteMessageAction(Request $request)
     {
         $userId       = $request->get('user_id', false);
@@ -683,4 +678,10 @@ class ApiController extends Controller
         }
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
     }
+
+    private function generateSrcImage($filename)
+    {
+        return 'http://'.$this->getRequest()->getHost().'/images/'.$filename;
+    }
+
 }
