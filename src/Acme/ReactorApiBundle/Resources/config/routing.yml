@@ -73,5 +73,3 @@ check_username_and_email:
 delete_message:
   pattern: /deleteMessage/
   defaults: { _controller: AcmeReactorApiBundle:Api:deleteMessage }
-  requirements:
-    _method:  POST
