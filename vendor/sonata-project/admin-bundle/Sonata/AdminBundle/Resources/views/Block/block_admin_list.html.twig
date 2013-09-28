@@ -23,7 +23,7 @@ file that was distributed with this source code.
 
             {% if display %}
                 <tr>
-                    <td colspan="3" style="background: none repeat scroll 0 0 #F7F7F7;"><strong>Posts</strong></td>
+                    <td colspan="3" style="background: none repeat scroll 0 0 #F7F7F7;"><strong>{{ group.label|trans({}, group.label_catalogue) }}</strong></td>
                 </tr>
 
                 {% for admin in group.items %}
