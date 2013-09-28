@@ -59,6 +59,7 @@ file that was distributed with this source code.
 
     <title>
         {{ 'Admin'|trans({}, 'SonataAdminBundle') }}
+
         {% if _title is not empty %}
             {{ _title|raw }}
         {% else %}
@@ -73,7 +74,7 @@ file that was distributed with this source code.
             {% endif %}
         {% endif%}
     </title>
-    <link rel="shortcut icon" href="/reactr_logo.png" />
+    <link rel="icon" href="/reactr_logo.png"/>
 </head>
 <body class="sonata-bc {% if _side_menu is empty %}sonata-ba-no-side-menu{% endif %}">
 {# initialize block value #}
