@@ -345,7 +345,7 @@ class ApiController extends Controller
             $em->remove($friend);
             $em->flush();
 
-            return new JsonResponse(array( 'status' => 'success'));
+            return new JsonResponse(array( 'status' => 'sucess'));
         }
 
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
