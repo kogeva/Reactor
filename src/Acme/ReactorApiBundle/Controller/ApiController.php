@@ -337,7 +337,7 @@ class ApiController extends Controller
             if($user->getSessionHash() !== $sessionHash)
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
-            $friend = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->findOneBy(array('friend_id' => $friendId));
+            $friend = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->findOneBy(array('friend_id' => $friendId, 'user_id' => $userId));
             if(!$friend)
                 return new JsonResponse(array( 'status' => 'failed', 'error' => 'Friend not found'));
 
@@ -345,7 +345,7 @@ class ApiController extends Controller
             $em->remove($friend);
             $em->flush();
 
-            return new JsonResponse(array( 'status' => 'sucess'));
+            return new JsonResponse(array( 'status' => 'success'));
         }
 
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
