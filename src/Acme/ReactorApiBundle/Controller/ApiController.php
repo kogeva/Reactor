@@ -5,6 +5,7 @@ namespace Acme\ReactorApiBundle\Controller;
 use Acme\ReactorApiBundle\Entity\Friend;
 use Acme\ReactorApiBundle\Entity\Message;
 use Acme\ReactorApiBundle\Entity\User;
+use Acme\ReactorApiBundle\Entity\DeletedMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -298,7 +299,7 @@ class ApiController extends Controller
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
             /** @var $friend Friend */
-            $friend = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->findOneBy(array('friend_id' => $friendId));
+            $friend = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Friend')->findOneByFriendId($friendId, $userId);
 
             if($friend)
             {
@@ -468,10 +469,15 @@ class ApiController extends Controller
                 $message->setToUser($friend_id);
                 $message->setPhoto($this->generateSrcImage($filename));
                 $message->setText($text);
+                $message->setDeletedByFrom('none');
+                $message->setDeletedByTo('none');
+
+                $reactionPhoto = 'none';
                 if($reactionFile)
                 {
-                    $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
-                    $reactionPhoto = $message->getReactionPhoto();
+                     $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
+                     $reactionPhoto = $message->getReactionPhoto();
+                     $reactionPhoto = explode('images', $reactionPhoto);
                 }
                 $message->setTo($friend_user);
                 $message->setFrom($user);
@@ -483,9 +489,10 @@ class ApiController extends Controller
 
                 $countNotReadMessage = $em->getRepository('AcmeReactorApiBundle:Message')->countNotRead($friend_id);
                 $photo = $message->getPhoto();
+                $photo = explode('images',$photo);
 
                 $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
-                                                    $countNotReadMessage, $message->getId(), $photo, $reactionPhoto, $message->getText(), $userId);
+                                                    $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
 
                 $sendedMessages[] = $message->toArray();
             }
@@ -547,7 +554,6 @@ class ApiController extends Controller
             foreach($messages as $key => $value)
             {
                 $interval = $currentDate->diff($value['created_at']);
-
                 $messages[$key]['deleted'] = ($interval->d > self::WEEK) ? true : false ;
 
                 if($value['from_user'] == $userId)
@@ -639,8 +645,44 @@ class ApiController extends Controller
         return new JsonResponse(array( 'status' => 'failed'));
     }
 
+    public function deleteMessageAction(Request $request)
+    {
+        $userId       = $request->get('user_id', false);
+        $session_hash = $request->get('session_hash', false);
+        $messageId    = $request->get('message_id', false);
+
+        if ($userId && $session_hash && $messageId)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $session_hash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $message = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Message')->find($messageId);
+
+            if($message)
+            {
+                if ($message->getFromUser() == $userId)
+                    $message->setDeletedByFrom($userId);
+                else
+                    $message->setDeletedByTo($userId);
+
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($message);
+                $em->flush();
+
+                return new JsonResponse(array('status' => 'success'));
+            }
+            else
+                return new JsonResponse(array('status' => 'failed', 'error' => 'message not found in system'));
+
+        }
+        return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
+
+
     private function generateSrcImage($filename)
     {
         return 'http://'.$this->getRequest()->getHost().'/images/'.$filename;
     }
+
 }

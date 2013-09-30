@@ -35,11 +35,38 @@ class User
     private $phone;
 
     /**
+     * @var string
+     */
+    private $device_token;
+
+    /**
+     * @var string
+     */
+    private $session_hash;
+
+    /**
+     * @var boolean
+     */
+    private $privacy_message;
+
+    /**
      * @var \DateTime
      */
     private $created_at;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $friends;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->friends = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -143,39 +170,27 @@ class User
     }
 
     /**
-     * Set created_at
+     * Set device_token
      *
-     * @param \DateTime $createdAt
+     * @param string $deviceToken
      * @return User
      */
-    public function setCreatedAt($createdAt)
+    public function setDeviceToken($deviceToken)
     {
-        $this->created_at = $createdAt;
+        $this->device_token = $deviceToken;
     
         return $this;
     }
 
     /**
-     * Get created_at
+     * Get device_token
      *
-     * @return \DateTime 
+     * @return string 
      */
-    public function getCreatedAt()
+    public function getDeviceToken()
     {
-        return $this->created_at;
+        return $this->device_token;
     }
-    /**
-     * @ORM\PrePersist
-     */
-    public function setCreatedAtValue()
-    {
-        // Add your code here
-    }
-    /**
-     * @var string
-     */
-    private $session_hash;
-
 
     /**
      * Set session_hash
@@ -199,69 +214,52 @@ class User
     {
         return $this->session_hash;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $message;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->message = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add message
+     * Set privacy_message
      *
-     * @param \Acme\ReactorApiBundle\Entity\User $message
+     * @param boolean $privacyMessage
      * @return User
      */
-    public function addMessage(\Acme\ReactorApiBundle\Entity\User $message)
+    public function setPrivacyMessage($privacyMessage)
     {
-        $this->message[] = $message;
+        $this->privacy_message = $privacyMessage;
     
         return $this;
     }
 
     /**
-     * Remove message
+     * Get privacy_message
      *
-     * @param \Acme\ReactorApiBundle\Entity\User $message
+     * @return boolean 
      */
-    public function removeMessage(\Acme\ReactorApiBundle\Entity\User $message)
+    public function getPrivacyMessage()
     {
-        $this->message->removeElement($message);
+        return $this->privacy_message;
     }
 
     /**
-     * Get message
+     * Set created_at
      *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * Set message
-     *
-     * @param \Acme\ReactorApiBundle\Entity\Message $message
+     * @param \DateTime $createdAt
      * @return User
      */
-    public function setMessage(\Acme\ReactorApiBundle\Entity\Message $message = null)
+    public function setCreatedAt($createdAt)
     {
-        $this->message = $message;
+        $this->created_at = $createdAt;
     
         return $this;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $friends;
 
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
 
     /**
      * Add friends
@@ -296,59 +294,10 @@ class User
         return $this->friends;
     }
     /**
-     * @var string
+     * @ORM\PrePersist
      */
-    private $device_token;
-
-
-    /**
-     * Set device_token
-     *
-     * @param string $deviceToken
-     * @return User
-     */
-    public function setDeviceToken($deviceToken)
+    public function setCreatedAtValue()
     {
-        $this->device_token = $deviceToken;
-    
-        return $this;
-    }
-
-    /**
-     * Get device_token
-     *
-     * @return string 
-     */
-    public function getDeviceToken()
-    {
-        return $this->device_token;
-    }
-    /**
-     * @var boolean
-     */
-    private $privacy_message;
-
-
-    /**
-     * Set privacy_message
-     *
-     * @param boolean $privacyMessage
-     * @return User
-     */
-    public function setPrivacyMessage($privacyMessage = true)
-    {
-        $this->privacy_message = $privacyMessage;
-    
-        return $this;
-    }
-
-    /**
-     * Get privacy_message
-     *
-     * @return boolean 
-     */
-    public function getPrivacyMessage()
-    {
-        return $this->privacy_message;
+        // Add your code here
     }
 }

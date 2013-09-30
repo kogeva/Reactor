@@ -20,8 +20,10 @@ class MessageRepository extends EntityRepository
                 FROM AcmeReactorApiBundle:Message ms
                 LEFT JOIN ms.from u
                 LEFT JOIN ms.to ut
-                WHERE ms.to_user = :id
-                  OR ms.from_user = :id
+                WHERE (ms.to_user = :id
+                  OR ms.from_user = :id)
+                AND ms.deletedByTo NOT LIKE :id
+                AND ms.deletedByFrom NOT LIKE :id
                 ORDER BY ms.created_at DESC'
             )
             ->setFirstResult($from)
@@ -37,6 +39,8 @@ class MessageRepository extends EntityRepository
                 FROM AcmeReactorApiBundle:Message ms
                 WHERE ms.to_user = :to_user
                   AND ms.id = :id
+                  AND ms.deletedByTo NOT LIKE :to_user
+                  AND ms.deletedByFrom NOT LIKE :to_user
                 ORDER BY ms.created_at DESC'
             )->setParameters(array('id' => $id, 'to_user' => $toUser))->getOneOrNullResult();
     }
@@ -48,18 +52,23 @@ class MessageRepository extends EntityRepository
                     SELECT ms.id
                     FROM AcmeReactorApiBundle:Message ms
                     WHERE ms.to_user = :user_id
-                      AND ms.is_read IS NULL'
+                      AND ms.is_read IS NULL
+                      AND ms.deletedByTo NOT LIKE :user_id
+                      AND ms.deletedByFrom NOT LIKE :user_id'
                 )->setParameters(array('user_id' => $userId))->getArrayResult();
         return count($messages);
     }
 
-    public function deleteOldMessages()
+    public function deleteOldPhotos()
     {
+
         $messages = $this->getEntityManager()
-                ->createQuery('
-                    DELETE AcmeReactorApiBundle:Message ms
+            ->createQuery('
+                    SELECT ms FROM AcmeReactorApiBundle:Message ms
                     WHERE ms.created_at <= :date ')
-                ->setParameter('date', new \DateTime('-7 day'));
-        $messages->getResult();
+            ->setParameter('date', new \DateTime('-7 day'))
+            ->getResult();
+        return $messages;
     }
+
 }

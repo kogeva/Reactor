@@ -27,7 +27,22 @@ class Message
     /**
      * @var string
      */
+    private $text;
+
+    /**
+     * @var string
+     */
     private $photo;
+
+    /**
+     * @var string
+     */
+    private $reaction_photo;
+
+    /**
+     * @var boolean
+     */
+    private $is_read;
 
     /**
      * @var \DateTime
@@ -35,10 +50,24 @@ class Message
     private $created_at;
 
     /**
+     * @var integer
+     */
+    private $deletedByTo;
+
+    /**
+     * @var integer
+     */
+    private $deletedByFrom;
+
+    /**
      * @var \Acme\ReactorApiBundle\Entity\User
      */
-    private $user;
+    private $to;
 
+    /**
+     * @var \Acme\ReactorApiBundle\Entity\User
+     */
+    private $from;
 
     /**
      * Get id
@@ -97,6 +126,29 @@ class Message
     }
 
     /**
+     * Set text
+     *
+     * @param string $text
+     * @return Message
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string 
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
      * Set photo
      *
      * @param string $photo
@@ -119,6 +171,64 @@ class Message
         return $this->photo;
     }
 
+    /**
+     * Set reaction_photo
+     *
+     * @param string $reactionPhoto
+     * @return Message
+     */
+    public function setReactionPhoto($reactionPhoto)
+    {
+        $this->reaction_photo = $reactionPhoto;
+    
+        return $this;
+    }
+
+    /**
+     * Get reaction_photo
+     *
+     * @return string 
+     */
+    public function getReactionPhoto()
+    {
+        return $this->reaction_photo;
+    }
+
+    /**
+     * Set is_read
+     *
+     * @param boolean $isRead
+     * @return Message
+     */
+    public function setIsRead($isRead)
+    {
+        $this->is_read = $isRead;
+    
+        return $this;
+    }
+
+    /**
+     * Get is_read
+     *
+     * @return boolean 
+     */
+    public function getIsRead()
+    {
+        return $this->is_read;
+    }
+
+    public function toArray()
+    {
+        return array(
+            'id'             => $this->id,
+            'from_user'      => $this->from_user,
+            'to_user'        => $this->to_user,
+            'photo'          => $this->photo,
+            'reaction_photo' => $this->reaction_photo,
+            'created_at'     => $this->created_at->format('Y-m-d H:i:s'),
+            'text'           => $this->text
+        );
+    }
     /**
      * Set created_at
      *
@@ -143,185 +253,50 @@ class Message
     }
 
     /**
-     * Set user
+     * Set deletedByTo
      *
-     * @param \Acme\ReactorApiBundle\Entity\User $user
+     * @param integer $deletedByTo
      * @return Message
      */
-    public function setUser(\Acme\ReactorApiBundle\Entity\User $user = null)
+    public function setDeletedByTo($deletedByTo)
     {
-        $this->user = $user;
+        $this->deletedByTo = $deletedByTo;
     
         return $this;
     }
 
     /**
-     * Get user
+     * Get deletedByTo
      *
-     * @return \Acme\ReactorApiBundle\Entity\User 
+     * @return integer 
      */
-    public function getUser()
+    public function getDeletedByTo()
     {
-        return $this->user;
+        return $this->deletedByTo;
     }
-    /**
-     * @var string
-     */
-    private $reaction_photo;
-
 
     /**
-     * Set reaction_photo
+     * Set deletedByFrom
      *
-     * @param string $reactionPhoto
+     * @param integer $deletedByFrom
      * @return Message
      */
-    public function setReactionPhoto($reactionPhoto)
+    public function setDeletedByFrom($deletedByFrom)
     {
-        $this->reaction_photo = $reactionPhoto;
+        $this->deletedByFrom = $deletedByFrom;
     
         return $this;
     }
 
     /**
-     * Get reaction_photo
+     * Get deletedByFrom
      *
-     * @return string 
+     * @return integer 
      */
-    public function getReactionPhoto()
+    public function getDeletedByFrom()
     {
-        return $this->reaction_photo;
+        return $this->deletedByFrom;
     }
-    /**
-     * @var string
-     */
-    private $text;
-
-
-    /**
-     * Set text
-     *
-     * @param string $text
-     * @return Message
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-    
-        return $this;
-    }
-
-    /**
-     * Get text
-     *
-     * @return string 
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-    /**
-     * @var boolean
-     */
-    private $is_read;
-
-
-    /**
-     * Set is_read
-     *
-     * @param boolean $isRead
-     * @return Message
-     */
-    public function setIsRead($isRead)
-    {
-        $this->is_read = $isRead;
-    
-        return $this;
-    }
-
-    /**
-     * Get is_read
-     *
-     * @return boolean 
-     */
-    public function getIsRead()
-    {
-        return $this->is_read;
-    }
-    /**
-     * @var \Acme\ReactorApiBundle\Entity\User
-     */
-    private $from;
-
-
-    /**
-     * Set from
-     *
-     * @param \Acme\ReactorApiBundle\Entity\User $from
-     * @return Message
-     */
-    public function setFrom(\Acme\ReactorApiBundle\Entity\User $from = null)
-    {
-        $this->from = $from;
-    
-        return $this;
-    }
-
-    /**
-     * Get from
-     *
-     * @return \Acme\ReactorApiBundle\Entity\User 
-     */
-    public function getFrom()
-    {
-        return $this->from;
-    }
-
-    public function toArray()
-    {
-        return array(
-            'id'             => $this->id,
-            'from_user'      => $this->from_user,
-            'to_user'        => $this->to_user,
-            'photo'          => $this->photo,
-            'reaction_photo' => $this->reaction_photo,
-            'created_at'     => $this->created_at->format('Y-m-d H:i:s'),
-            'text'           => $this->text
-        );
-    }
-    /**
-     * @var \Acme\ReactorApiBundle\Entity\User
-     */
-    private $shipping;
-
-
-    /**
-     * Set shipping
-     *
-     * @param \Acme\ReactorApiBundle\Entity\User $shipping
-     * @return Message
-     */
-    public function setShipping(\Acme\ReactorApiBundle\Entity\User $shipping = null)
-    {
-        $this->shipping = $shipping;
-    
-        return $this;
-    }
-
-    /**
-     * Get shipping
-     *
-     * @return \Acme\ReactorApiBundle\Entity\User 
-     */
-    public function getShipping()
-    {
-        return $this->shipping;
-    }
-    /**
-     * @var \Acme\ReactorApiBundle\Entity\User
-     */
-    private $to;
-
 
     /**
      * Set to
@@ -344,5 +319,28 @@ class Message
     public function getTo()
     {
         return $this->to;
+    }
+
+    /**
+     * Set from
+     *
+     * @param \Acme\ReactorApiBundle\Entity\User $from
+     * @return Message
+     */
+    public function setFrom(\Acme\ReactorApiBundle\Entity\User $from = null)
+    {
+        $this->from = $from;
+    
+        return $this;
+    }
+
+    /**
+     * Get from
+     *
+     * @return \Acme\ReactorApiBundle\Entity\User 
+     */
+    public function getFrom()
+    {
+        return $this->from;
     }
 }
