@@ -4,7 +4,7 @@ require_once "sendNotification.php";
 
 $serializeData = $argv[1];
 $data = unserialize($serializeData);
-$browserApiKey = 'AIzaSyDcIOqygik-KewTHpm0dDRDcDlAYaZxEzs';
+$browserApiKey = 'AIzaSyBY0Oi_BEjZTN7NV_piVpnVaf2cFT_Guik';
 
 foreach($data as $entity)
 {
