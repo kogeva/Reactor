@@ -4,11 +4,9 @@ require_once "sendNotification.php";
 
 $serializeData = $argv[1];
 $data = unserialize($serializeData);
-$browserApiKey = 'AIzaSyA93BAblwJIDa3bEknH6dUMH4OjrjWCwzU';
 
 foreach($data as $entity)
 {
-
     $token = $entity[0];
     $text = $entity[1];
     $notRead = $entity[2];
@@ -18,10 +16,7 @@ foreach($data as $entity)
     $messageText = $entity[6];
     $userId = $entity[7];
 
-    $response = sendNotification(
-        $browserApiKey,
-        array($token),
-        array(
+    $data = array(
             'badge' => $notRead,
             'text' => $text,
             'message_id' => $messageId,
@@ -29,8 +24,13 @@ foreach($data as $entity)
             'reactorPhotoLink' => $reactionPhoto,
             'message_text' => $messageText,
             'user_id' => $userId
-        )
     );
 
-    echo $response;
+    $apiKey = "AIzaSyDcIOqygik-KewTHpm0dDRDcDlAYaZxEzs";
+    $devices = array($token);
+    $message = $data;
+
+    $gcpm = new GCMPushMessage($apiKey);
+    $gcpm->setDevices($devices);
+    $response = $gcpm->send($message);
 }
