@@ -4,7 +4,7 @@ require_once "sendNotification.php";
 
 $serializeData = $argv[1];
 $data = unserialize($serializeData);
-$browserApiKey = 'AIzaSyA93BAblwJIDa3bEknH6dUMH4OjrjWCwzU';
+$browserApiKey = 'AIzaSyDcIOqygik-KewTHpm0dDRDcDlAYaZxEzs';
 
 foreach($data as $entity)
 {
@@ -20,7 +20,7 @@ foreach($data as $entity)
 
     $response = sendNotification(
         $browserApiKey,
-        $token,
+        array($token),
         array(
             'badge' => $notRead,
             'text' => $text,
