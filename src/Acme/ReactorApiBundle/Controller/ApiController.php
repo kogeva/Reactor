@@ -492,7 +492,7 @@ class ApiController extends Controller
                 $photo = $message->getPhoto();
                 $photo = explode('images',$photo);
 
-                if ($friend_user->getDeviceToken() > 73)
+                if (strlen($friend_user->getDeviceToken())  > 73)
                     $pushNotificationDataAndroid[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
                         $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
                 else
