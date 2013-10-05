@@ -32,5 +32,5 @@ foreach($data as $entity)
         )
     );
 
-    echo $response . 'yes';
+    echo $response;
 }
