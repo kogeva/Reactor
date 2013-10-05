@@ -26,7 +26,7 @@ foreach($data as $entity)
             'user_id' => $userId
     );
 
-    $apiKey = "AIzaSyDcIOqygik-KewTHpm0dDRDcDlAYaZxEzs";
+    $apiKey = "AIzaSyA93BAblwJIDa3bEknH6dUMH4OjrjWCwzU";
     $devices = array($token);
     $message = $data;
 
