@@ -460,6 +460,7 @@ class ApiController extends Controller
             $sendedMessages = array();
 
             $pushNotificationDataIOS = array();
+            $pushNotificationDataAndroid = array();
             foreach($friends as $friend_id)
             {
                 $friend_user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($friend_id);
@@ -491,12 +492,17 @@ class ApiController extends Controller
                 $photo = $message->getPhoto();
                 $photo = explode('images',$photo);
 
-                $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
+                if ($friend_user->getDeviceToken() > 73)
+                    $pushNotificationDataAndroid[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
+                        $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
+                else
+                    $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
                                                     $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
 
                 $sendedMessages[] = $message->toArray();
             }
             exec("php ".__DIR__."/../ApnsPHPBundle/sample_push.php '".serialize($pushNotificationDataIOS) ."' > /dev/null &");
+            exec("php ".__DIR__."/../GCMPhp/sendNotification.php '".serialize($pushNotificationDataAndroid) ."' > /dev/null &");
 
             return new JsonResponse(array(
                     'status' => 'success',
