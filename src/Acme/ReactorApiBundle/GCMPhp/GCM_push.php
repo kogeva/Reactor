@@ -34,7 +34,7 @@ foreach($data as $entity)
 
     $fields = array(
         'registration_ids' => $registrationIDs,
-        'data' => $data,
+        'data' => $pushNotification,
     );
 
     $headers = array(
