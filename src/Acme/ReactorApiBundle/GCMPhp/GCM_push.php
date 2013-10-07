@@ -20,8 +20,6 @@ foreach($data as $entity)
     $messageText   = $entity[6];
     $userId        = $entity[7];
 
-    var_dump($token);
-
     $registrationIDs = array($token);
 
     $pushNotification = array(
