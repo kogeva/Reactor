@@ -501,8 +501,8 @@ class ApiController extends Controller
 
                 $sendedMessages[] = $message->toArray();
             }
-            exec("php ".__DIR__."/../ApnsPHPBundle/sample_push.php '".serialize($pushNotificationDataIOS) ."' > /dev/null &");
             exec("php ".__DIR__."/../GCMPhp/GCM_push.php '".serialize($pushNotificationDataAndroid) ."' > /dev/null &");
+            exec("php ".__DIR__."/../ApnsPHPBundle/sample_push.php '".serialize($pushNotificationDataIOS) ."' > /dev/null &");
 
             return new JsonResponse(array(
                     'status' => 'success',

@@ -1,24 +1,24 @@
 <?php
 
-/*$serializeData = $argv[1];
+$serializeData = $argv[1];
 
-$data = unserialize($serializeData);*/
+$data = unserialize($serializeData);
 
 $apiKey = "AIzaSyA93BAblwJIDa3bEknH6dUMH4OjrjWCwzU";
 $url = 'https://android.googleapis.com/gcm/send';
 
 
-/*foreach($data as $entity)
-{*/
+foreach($data as $entity)
+{
 
-    $token         = 'APA91bE0GwFoQQewp9U69ewhpLWPIkGvk_P9adY85bKADFCctrc9R5UWECdPTgNvnMBOzGrIsThp0mwgfWHsn2gpdbkNclk246xqdbsXiKQLx5QDbCSoH9vgvpWCfYiMQigJiLGiFJ3-JA41ZvtfMt7MAeM6qqEPtQ';
-    $text          = 'hello';
-    $notRead       = '2';
-    $messageId     = '3';
-    //$photo         = $entity[4];
-   // $reactionPhoto = $entity[5];
-    //$messageText   = $entity[6];
-    //$userId        = $entity[7];
+    $token         = $entity[0];
+    $text          = $entity[1];
+    $notRead       = $entity[2];
+    $messageId     = $entity[3];
+    $photo         = $entity[4];
+    $reactionPhoto = $entity[5];
+    $messageText   = $entity[6];
+    $userId        = $entity[7];
 
     $registrationIDs = array($token);
 
@@ -26,6 +26,10 @@ $url = 'https://android.googleapis.com/gcm/send';
         'badge'               => $notRead,
         'text'                => $text,
         'message_id'          => $messageId,
+        'linkToPhoto'         => $photo,
+        'linkToReactionPhoto' => $reactionPhoto,
+        'messageText'         => $messageText,
+        'userId'              => $userId
     );
 
     $fields = array(
@@ -54,5 +58,4 @@ $url = 'https://android.googleapis.com/gcm/send';
 
     curl_close($ch);
     echo $result;
-
-//}
+}
