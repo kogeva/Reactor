@@ -9,7 +9,7 @@
     date_default_timezone_set('Europe/Rome');
 
     error_reporting(-1);
-
+    $ch = curl_init();
 
     foreach($data as $entity)
     {
@@ -45,7 +45,6 @@
             'Content-Type: application/json'
         );
 
-        $ch = curl_init();
 
         curl_setopt( $ch, CURLOPT_URL, $url );
         curl_setopt( $ch, CURLOPT_POST, true );
@@ -59,8 +58,9 @@
 
         $result = curl_exec($ch);
 
-        curl_close($ch);
         echo $result;
-
 }
+
+curl_close($ch);
+
 
