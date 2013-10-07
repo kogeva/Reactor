@@ -1,10 +1,7 @@
 <?php
+    $serializeData = $argv[1];
 
-function sendNotification($data)
-{
-    /*$serializeData = $argv[1];
-
-$data = unserialize($serializeData);*/
+    $data = unserialize($serializeData);
 
     $apiKey = "AIzaSyA93BAblwJIDa3bEknH6dUMH4OjrjWCwzU";
     $url = 'https://android.googleapis.com/gcm/send';
@@ -64,6 +61,6 @@ $data = unserialize($serializeData);*/
 
         curl_close($ch);
         echo $result;
-    }
+
 }
 
