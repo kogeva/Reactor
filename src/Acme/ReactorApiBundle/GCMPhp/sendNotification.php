@@ -1,69 +1,79 @@
 <?php
+namespace AndroidPusher;
 
-class GCMPushMessage {
+class Pusher
+{
+    const GOOGLE_GCM_URL = 'https://android.googleapis.com/gcm/send';
 
-    var $url = 'https://android.googleapis.com/gcm/send';
-    var $serverApiKey = "";
-    var $devices = array();
+    private $apiKey;
+    private $proxy;
+    private $output;
 
-    function GCMPushMessage($apiKeyIn){
-        $this->serverApiKey = $apiKeyIn;
+    public function __construct($apiKey, $proxy = null)
+    {
+        $this->apiKey = $apiKey;
+        $this->proxy  = $proxy;
     }
 
-    function setDevices($deviceIds){
-
-        if(is_array($deviceIds)){
-            $this->devices = $deviceIds;
-        } else {
-            $this->devices = array($deviceIds);
-        }
-
-    }
-
-    function send($message){
-
-        if(!is_array($this->devices) || count($this->devices) == 0){
-            $this->error("No devices set");
-        }
-
-        if(strlen($this->serverApiKey) < 8){
-            $this->error("Server API Key not set");
-        }
-
-        $fields = array(
-            'registration_ids'  => $this->devices,
-            'data'              => array( "message" => $message ),
-        );
-
-        $headers = array(
-            'Authorization: key=' . $this->serverApiKey,
-            'Content-Type: application/json'
-        );
-
-        // Open connection
+    /**
+     * @param string|array $regIds
+     * @param string $data
+     * @throws \Exception
+     */
+    public function notify($regIds, $data)
+    {
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, self::GOOGLE_GCM_URL);
+        if (!is_null($this->proxy)) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+        }
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->getHeaders());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->getPostFields($regIds, $data));
 
-        // Set the url, number of POST vars, POST data
-        curl_setopt( $ch, CURLOPT_URL, $this->url );
-
-        curl_setopt( $ch, CURLOPT_POST, true );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
-
-        // Execute post
         $result = curl_exec($ch);
+        if ($result === false) {
+            throw new \Exception(curl_error($ch));
+        }
 
-        // Close connection
         curl_close($ch);
 
-        return $result;
+        $this->output = $result;
     }
 
-    function error($msg){
-        echo "Android send notification failed with error:";
-        echo "\t" . $msg;
-        exit(1);
+    /**
+     * @return array
+     */
+    public function getOutputAsArray()
+    {
+        return json_decode($this->output, true);
+    }
+
+    /**
+     * @return object
+     */
+    public function getOutputAsObject()
+    {
+        return json_decode($this->output);
+    }
+
+    private function getHeaders()
+    {
+        return [
+            'Authorization: key=' . $this->apiKey,
+            'Content-Type: application/json'
+        ];
+    }
+
+    private function getPostFields($regIds, $data)
+    {
+        $fields = [
+            'registration_ids' => is_string($regIds) ? [$regIds] : $regIds,
+            'data'             => is_string($data) ? ['message' => $data] : $data,
+        ];
+
+        return json_encode($fields, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
     }
 }
