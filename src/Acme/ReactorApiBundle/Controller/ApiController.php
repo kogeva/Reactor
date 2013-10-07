@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-require_once '/GCMPhp/GCM_push.php';
 class ApiController extends Controller
 {
     const WEEK = 7;
@@ -502,8 +501,8 @@ class ApiController extends Controller
 
                 $sendedMessages[] = $message->toArray();
             }
+            exec("php ".__DIR__."/../GCMPhp/GCM_push.php '".serialize($pushNotificationDataAndroid) ."' > /dev/null &");
             exec("php ".__DIR__."/../ApnsPHPBundle/sample_push.php '".serialize($pushNotificationDataIOS) ."' > /dev/null &");
-            sendNotification($pushNotificationDataAndroid);
 
             return new JsonResponse(array(
                     'status' => 'success',
