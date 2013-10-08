@@ -3,7 +3,7 @@
 
     $data = unserialize($serializeData);
 
-    $apiKey = "AIzaSyDcIOqygik-KewTHpm0dDRDcDlAYaZxEzs";
+    $apiKey = "AIzaSyBo3MA5K2WCjVhiXNTvnlThV8dsZ_gB4zQ";
     $url = 'https://android.googleapis.com/gcm/send';
 
     date_default_timezone_set('Europe/Rome');
