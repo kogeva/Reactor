@@ -493,15 +493,18 @@ class ApiController extends Controller
                 $photo = explode('images',$photo);
 
                 if (strlen($friend_user->getDeviceToken())  > 73)
+                {
                     $pushNotificationDataAndroid[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername());
+                }
+
                 else
                     $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
-                                                    $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
+                        $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
 
                 $sendedMessages[] = $message->toArray();
             }
-            exec("php ".__DIR__."/../GCMPhp/GCM_push.php '".serialize($pushNotificationDataAndroid) ."' > /dev/null &");
             exec("php ".__DIR__."/../ApnsPHPBundle/sample_push.php '".serialize($pushNotificationDataIOS) ."' > /dev/null &");
+            exec("php ".__DIR__."/../GCMPhp/GCM_push.php '".serialize($pushNotificationDataAndroid) ."' > /dev/null &");
 
             return new JsonResponse(array(
                     'status' => 'success',
