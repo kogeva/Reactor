@@ -473,7 +473,7 @@ class ApiController extends Controller
                 $message->setDeletedByFrom('none');
                 $message->setDeletedByTo('none');
 
-                $reactionPhoto = 'none';
+                $reactionPhoto = null;
                 if($reactionFile)
                 {
                      $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
@@ -493,7 +493,8 @@ class ApiController extends Controller
                 $photo = explode('images',$photo);
 
                 if (strlen($friend_user->getDeviceToken())  > 73)
-                    $pushNotificationDataAndroid[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername());
+                    $pushNotificationDataAndroid[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
+                        $message->getId(), $photo[1], $reactionPhoto[1] );
                 else
                     $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
                         $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
