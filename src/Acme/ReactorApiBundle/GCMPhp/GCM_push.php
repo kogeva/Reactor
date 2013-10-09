@@ -47,7 +47,8 @@ foreach($data as $entity)
             'Authorization: key=' . $apiKey,
             'Content-Type: application/json'
         );
-
+        
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields ));
         $result = curl_exec($ch);
 
