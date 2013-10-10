@@ -28,15 +28,20 @@ foreach($data as $entity)
     $messageId           = $entity[2];
     $linkToPhoto         = $entity[3];
     $linkToReactionPhoto = $entity[4];
+    $textPhoto           = $entity[5];
 
     $registrationIDs = array( $token );
+
+    if (!$linkToReactionPhoto)
+        $linkToReactionPhoto = '';
 
     $fields = array(
         'registration_ids'  => $registrationIDs,
         'data'              => array ("message" => $text,
-            "message_id" => $messageId,
-            "photo" => $linkToPhoto,
-            "reactionPhoto" => $linkToReactionPhoto ) );
+                                      "message_id" => $messageId,
+                                      "photo" => $linkToPhoto,
+                                      "reactionPhoto" => $linkToReactionPhoto,
+                                      "text" => $textPhoto));
 
     curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
 
