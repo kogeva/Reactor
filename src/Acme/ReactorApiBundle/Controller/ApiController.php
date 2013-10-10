@@ -506,8 +506,7 @@ class ApiController extends Controller
 
             return new JsonResponse(array(
                     'status' => 'success',
-                    'messages' => $sendedMessages,
-                    'push' => $pushNotificationDataAndroid
+                    'messages' => $sendedMessages
                 )
             );
         }

@@ -33,15 +33,16 @@ foreach($data as $entity)
     $registrationIDs = array( $token );
 
     if (!$linkToReactionPhoto)
-        $linkToReactionPhoto = '';
+        $linkToReactionPhoto = false;
 
     $fields = array(
         'registration_ids'  => $registrationIDs,
         'data'              => array ("message" => $text,
                                       "message_id" => $messageId,
                                       "photo" => $linkToPhoto,
+                                      "text" => $textPhoto,
                                       "reactionPhoto" => $linkToReactionPhoto,
-                                      "text" => $textPhoto));
+                                      ));
 
     curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
 
