@@ -473,7 +473,7 @@ class ApiController extends Controller
                 $message->setDeletedByFrom('none');
                 $message->setDeletedByTo('none');
 
-                $reactionPhoto = '';
+                $reactionPhoto = null;
                 if($reactionFile)
                 {
                      $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
