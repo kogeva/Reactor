@@ -474,11 +474,12 @@ class ApiController extends Controller
                 $message->setDeletedByTo('none');
 
                 $reactionPhoto = null;
+                $reactionPhotoName = null;
                 if($reactionFile)
                 {
                      $message->setReactionPhoto($this->generateSrcImage($reactionFilename));
                      $reactionPhoto = $message->getReactionPhoto();
-                     $reactionPhoto = explode('images', $reactionPhoto);
+                     $reactionPhotoName = explode('images', $reactionPhoto);
                 }
                 $message->setTo($friend_user);
                 $message->setFrom($user);
@@ -490,14 +491,14 @@ class ApiController extends Controller
 
                 $countNotReadMessage = $em->getRepository('AcmeReactorApiBundle:Message')->countNotRead($friend_id);
                 $photo = $message->getPhoto();
-                $photo = explode('images',$photo);
+                $photoName = explode('images',$photo);
 
                 if (strlen($friend_user->getDeviceToken())  > 73)
                     $pushNotificationDataAndroid[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
-                        $message->getId(), $photo[1], $reactionPhoto[1], $message->getText() );
+                        $message->getId(), $photo, $reactionPhoto, $message->getText() );
                 else
                     $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
-                        $countNotReadMessage, $message->getId(), $photo[1], $reactionPhoto[1], $message->getText(), $userId);
+                        $countNotReadMessage, $message->getId(), $photoName[1], $reactionPhotoName[1], $message->getText(), $userId);
 
                 $sendedMessages[] = $message->toArray();
             }
