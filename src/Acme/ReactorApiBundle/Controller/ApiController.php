@@ -495,7 +495,7 @@ class ApiController extends Controller
 
                 if (strlen($friend_user->getDeviceToken())  > 73)
                     $pushNotificationDataAndroid[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
-                        $message->getId(), $photo, $reactionPhoto, $message->getText() );
+                        (string)$message->getId(), $photo, $reactionPhoto, $message->getText() );
                 else
                     $pushNotificationDataIOS[] = array(str_replace(array(' ', '>', '<'), '', $friend_user->getDeviceToken()),'You have new message from '. $user->getUsername(),
                         $countNotReadMessage, $message->getId(), $photoName[1], $reactionPhotoName[1], $message->getText(), $userId);
