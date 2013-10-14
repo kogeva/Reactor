@@ -1,12 +1,12 @@
 {#
- 
+
  This file is part of the Sonata package.
- 
+
  (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
- 
+
  For the full copyright and license information, please view the LICENSE
  file that was distributed with this source code.
- 
+
  #}
  {% set _preview      = block('preview') %}
  {% set _form         = block('form') %}
@@ -48,7 +48,7 @@
         <script src="{{ asset('bundles/stfalcontinymce/js/init.jquery.js') }}" type="text/javascript"></script>
         <script src="{{ asset('bundles/stfalcontinymce/js/init.standart.js') }}" type="text/javascript"></script>
         <script src="{{ asset('bundles/stfalcontinymce/js/ready.min.js') }}" type="text/javascript"></script>
-        
+
         {{ tinymce_init() }}
         <script src="{{ asset('bundles/sonatajquery/jquery-1.8.3.js') }}" type="text/javascript"></script>
         <script src="{{ asset('bundles/sonatajquery/jquery-ui-1.8.23.js') }}" type="text/javascript"></script>
@@ -217,11 +217,7 @@
     </div>
 
     {% block footer %}
-        <div class="row-fluid">
-            <div class="span2 offset10 pull-right">
-                <span class="label"><a href="http://sonata-project.org" rel="noreferrer" style="text-decoration: none; color: black">Sonata Project</a></span>
-            </div>
-        </div>
+
     {% endblock %}
 </div>
 </body>
