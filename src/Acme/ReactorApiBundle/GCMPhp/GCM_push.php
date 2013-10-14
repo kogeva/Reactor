@@ -29,6 +29,7 @@ foreach($data as $entity)
     $linkToPhoto         = $entity[3];
     $linkToReactionPhoto = $entity[4];
     $textPhoto           = $entity[5];
+    $senderId            = $entity[6];
 
     $registrationIDs = array( $token );
 
@@ -42,6 +43,7 @@ foreach($data as $entity)
                                       "photo" => $linkToPhoto,
                                       "text" => $textPhoto,
                                       "reactionPhoto" => $linkToReactionPhoto,
+                                      "senderId" => $senderId
                                       ));
 
     curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
