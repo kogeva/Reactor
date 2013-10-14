@@ -118,6 +118,8 @@ stfalcon_tinymce:
         theme:
             simple:
                  mode: "textareas"
+                 height : 200
+                 width : 1000
                  theme: "advanced"
                  theme_advanced_buttons1: "mylistbox,mysplitbutton,bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,insertfile,insertimage"
                  theme_advanced_buttons2: "image"
@@ -133,6 +135,8 @@ stfalcon_tinymce:
 
             advanced:
                  theme: "advanced"
+                 height : 200
+                 width : 1000
                  plugins: "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template"
                  theme_advanced_buttons1: "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect"
                  theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor"
