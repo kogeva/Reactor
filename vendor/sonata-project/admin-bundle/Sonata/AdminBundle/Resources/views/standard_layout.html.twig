@@ -45,6 +45,10 @@
                 CONFIRM_EXIT:  '{{ 'confirm_exit'|trans({}, 'SonataAdminBundle')|escape('js') }}'
             };
         </script>
+        <script src="{{ asset('bundles/stfalcontinymce/js/init.jquery.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/stfalcontinymce/js/init.standart.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('bundles/stfalcontinymce/js/ready.min.js') }}" type="text/javascript"></script>
+        
         {{ tinymce_init() }}
         <script src="{{ asset('bundles/sonatajquery/jquery-1.8.3.js') }}" type="text/javascript"></script>
         <script src="{{ asset('bundles/sonatajquery/jquery-ui-1.8.23.js') }}" type="text/javascript"></script>
