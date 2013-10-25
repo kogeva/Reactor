@@ -34,7 +34,7 @@ require_once 'ApnsPHP/Autoload.php';
 
 $push = new ApnsPHP_Push(
 	ApnsPHP_Abstract::ENVIRONMENT_SANDBOX,
-	__DIR__.'/apns-dev.pem'
+	__DIR__.'/apns-distr.pem'
 );
 
 $push->setRootCertificationAuthority(__DIR__.'/apns-distr.pem');
