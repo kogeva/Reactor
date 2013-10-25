@@ -56,8 +56,8 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 	protected $_nSendRetryTimes = 3; /**< @type integer Send retry times. */
 
 	protected $_aServiceURLs = array(
-		'ssl://gateway.push.apple.com:2196', // Production environment
-		'ssl://gateway.sandbox.push.apple.com:2196' // Sandbox environment
+		'ssl://gateway.push.apple.com:2195', // Production environment
+		'ssl://gateway.sandbox.push.apple.com:2195' // Sandbox environment
 	); /**< @type array Service URLs environments. */
 
 	protected $_aMessageQueue = array(); /**< @type array Message queue. */
