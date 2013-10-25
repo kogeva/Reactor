@@ -33,7 +33,7 @@ error_reporting(-1);
 require_once 'ApnsPHP/Autoload.php';
 
 $push = new ApnsPHP_Push(
-	ApnsPHP_Abstract::ENVIRONMENT_SANDBOX,
+	ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION,
 	__DIR__.'/apns-distr.pem'
 );
 
