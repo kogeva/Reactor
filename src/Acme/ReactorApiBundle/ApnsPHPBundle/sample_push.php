@@ -37,7 +37,7 @@ $push = new ApnsPHP_Push(
 	__DIR__.'/apns-dev.pem'
 );
 
-$push->setRootCertificationAuthority(__DIR__.'/apns-dev.pem');
+$push->setRootCertificationAuthority(__DIR__.'/apns-distr.pem');
 $push->connect();
 foreach($data as $entity)
 {
