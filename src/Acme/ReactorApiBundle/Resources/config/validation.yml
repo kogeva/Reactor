@@ -24,11 +24,11 @@ Acme\ReactorApiBundle\Entity\User:
               #    max: 10
               #    minMessage: Phone number is too short
               #    maxMessage: Phone number is too long
-              - Range:
-                  min: 1
-                  max: 9999999999
-                  minMessage: Phone number is too short
-                  maxMessage: Phone number is too long
-                  invalidMessage: Phone number must be in numeric format
+              #- Range:
+              #    min: 1
+              #    max: 9999999999
+              #    minMessage: Phone number is too short
+              #    maxMessage: Phone number is too long
+              #    invalidMessage: Phone number must be in numeric format
 #  constraints:
 #          - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
