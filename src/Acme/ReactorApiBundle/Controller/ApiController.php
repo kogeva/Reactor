@@ -36,7 +36,7 @@ class ApiController extends Controller
                 $user->setPassword(md5($password));
                 $user->setPhone($phone);
                 $user->setDeviceToken($deviceToken);
-                $user->setPrivacyMessage(false);
+                $user->setPrivacyMessage(true);
                 $user->setSessionHash(md5(time()));
                 $user->setCreatedAt(new \DateTime());
 
@@ -371,7 +371,7 @@ class ApiController extends Controller
             {
                 if ($phone[0] == "+")
                     $phone = str_replace("+","",$phone);
-                
+
                 $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findUserByPhone($phone);
 
                 $phoneArraInSystem[] = array(
