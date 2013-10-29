@@ -369,6 +369,9 @@ class ApiController extends Controller
 
             foreach($phoneArray as $phone)
             {
+                if ($phone[0] == "+")
+                    $phone = str_replace("+","",$phone);
+                
                 $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findUserByPhone($phone);
 
                 $phoneArraInSystem[] = array(
