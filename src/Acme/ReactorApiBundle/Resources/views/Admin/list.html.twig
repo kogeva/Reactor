@@ -1,0 +1,95 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+
+{% block title %}Photo statistic{% endblock%}
+
+{% block breadcrumb %}
+    <li>
+        <a href="{{ path('sonata_admin_dashboard') }}">Dashboard</a>
+        <span class="divider">/</span>
+    </li>
+    <li class="active">Photo list</li>
+{% endblock %}
+{% block content %}
+    <table class="table table-bordered table-striped">
+    {% block table_body %}
+       <thead>
+          <tr class="sonata-ba-list-field-header">
+            <th class="sonata-ba-list-field-header-text">Username</th>
+            <th class="sonata-ba-list-field-header-text">Sent photos</th>
+            <th class="sonata-ba-list-field-header-text">Received photos</th>
+            <th class="sonata-ba-list-field-header-text">Sent reaction photos</th>
+            <th class="sonata-ba-list-field-header-text">Received reaction photos</th>
+          </tr>
+       </thead>
+       <tbody>
+       {% for user in users %}
+          <tr>
+              {% for info in user %}
+                  <td class="sonata-ba-list-field sonata-ba-list-field-batch">
+                    {{ info }}
+                  </td>
+              {% endfor %}
+
+          </tr>
+       {% endfor %}
+       <tr>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+       </tr>
+       <tr>
+           <td>Total</td>
+           {% for photo in photos %}
+               <td>{{ photo.ph }}</td>
+               <td>{{ photo.ph }}</td>
+               <td>{{ photo.rPh }}</td>
+               <td>{{ photo.rPh }}</td>
+           {% endfor %}
+       </tr>
+       </tbody>
+    </table>
+    {% endblock %}
+    <form class="form-horizontal" action="{{ path('all_photo_list') }}" method="POST">
+        {% if form.vars.errors|length > 0 %}
+            <div class="sonata-ba-form-error">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <fieldset>
+                    <div class="sonata-ba-collapsed-fields">
+                        {% for field in form.children %}
+                            <div class="control-group{% if field.vars.errors|length > 0%} error{%endif%}">
+                                {% if(field.vars.name != '_token') %}
+                                    <div class="control-label">
+                                        {{ form_label(field) }}
+                                    </div>
+                                {% endif %}
+
+                                <div class="controls sonata-ba-field {% if field.vars.errors|length > 0 %}sonata-ba-field-error{% endif %}">
+                                    {{ form_widget(field) }}
+
+                                    {% if field.vars.errors|length > 0 %}
+                                        <div class="help-inline sonata-ba-field-error-messages">
+                                            {{ form_errors(field) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        {{ form_rest(form) }}
+
+        <div class="well well-small form-actions">
+            <input type="submit" class="btn btn-primary" value="Send"/>
+        </div>
+    </form>
+{% endblock %}

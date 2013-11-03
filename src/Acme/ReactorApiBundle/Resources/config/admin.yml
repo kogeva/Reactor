@@ -11,3 +11,8 @@ services:
             - 'SonataAdminBundle:CRUD'
         calls:
             - [ setTranslationDomain, [AcmeReactorApiBundle]]
+            
+    reactr.photo.form.type:
+            class: Acme\ReactorApiBundle\Form\Type\PhotoFormType
+            tags:
+                - { name: form.type, alias: reactr_photo_list }

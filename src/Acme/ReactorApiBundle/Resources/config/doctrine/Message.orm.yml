@@ -34,11 +34,13 @@ Acme\ReactorApiBundle\Entity\Message:
   manyToOne:
       to:
         targetEntity: User
+        inversedBy: toUser
         joinColumn:
           name: to_user
           referencedColumnName: id
       from:
         targetEntity: User
+        inversedBy: fromUser
         joinColumn:
           name: from_user
           referencedColumnName: id

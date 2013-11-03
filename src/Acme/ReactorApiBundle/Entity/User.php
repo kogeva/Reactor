@@ -9,6 +9,53 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    private $sentMessagesNum;
+    private $receivedMessagesNum;
+    private $sentReactionPhotoNum;
+    private $receivedReactionPhotoNum;
+
+    public function sentMessagesNum($from, $to)
+    {
+        $this->sentMessagesNum = 0;
+        foreach ($this->fromUser as $message)
+        {
+            if ( ($message->getCreatedAt()->format('c') >= $from) && ($message->getCreatedAt()->format('c') <= $to) )
+                $this->sentMessagesNum++;
+        }
+        return $this->sentMessagesNum;
+    }
+
+    public function receivedMessagesNum($from, $to)
+    {
+        $this->receivedMessagesNum = 0;
+        foreach ($this->toUser as $message)
+        {
+            if ( ($message->getCreatedAt()->format('c') >= $from) && ($message->getCreatedAt()->format('c') <= $to) )
+                $this->receivedMessagesNum++;
+        }
+        return $this->receivedMessagesNum;
+    }
+    public function sentReactionPhotoNum($from, $to)
+    {
+
+        foreach ($this->fromUser as $photo)
+        {
+            if ($photo->getReactionPhoto() != null && $photo->getCreatedAt()->format('c') >= $from && $photo->getCreatedAt()->format('c') <= $to)
+                $this->sentReactionPhotoNum[] = $photo->getReactionPhoto();
+        }
+        return count($this->sentReactionPhotoNum);
+    }
+
+    public function receivedReactionPhotoNum($from, $to)
+    {
+        foreach ($this->toUser as $photo)
+        {
+            if ($photo->getReactionPhoto() != null && $photo->getCreatedAt()->format('c') >= $from && $photo->getCreatedAt()->format('c') <= $to)
+                $this->receivedReactionPhotoNum[] = $photo->getReactionPhoto();
+        }
+        return count($this->receivedReactionPhotoNum);
+    }
+
     /**
      * @var integer
      */

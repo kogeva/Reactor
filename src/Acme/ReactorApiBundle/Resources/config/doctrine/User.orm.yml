@@ -39,5 +39,11 @@ Acme\ReactorApiBundle\Entity\User:
     friends:
       targetEntity: Friend
       mappedBy: user
+    toUser:
+      targetEntity: Message
+      mappedBy: to
+    fromUser:
+      targetEntity: Message
+      mappedBy: from
   lifecycleCallbacks:
     prePersist: [ setCreatedAtValue ]
