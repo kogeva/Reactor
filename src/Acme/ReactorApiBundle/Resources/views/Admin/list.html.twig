@@ -10,74 +10,7 @@
     <li class="active">Photo list</li>
 {% endblock %}
 {% block content %}
-    <table class="table table-bordered table-striped">
-    {% block table_body %}
-       <thead>
-          <tr class="sonata-ba-list-field-header">
-            <th class="sonata-ba-list-field-header-text">Username</th>
-            <th class="sonata-ba-list-field-header-text">Sent photos</th>
-            <th class="sonata-ba-list-field-header-text">Received photos</th>
-            <th class="sonata-ba-list-field-header-text">Sent reaction photos</th>
-            <th class="sonata-ba-list-field-header-text">Received reaction photos</th>
-          </tr>
-       </thead>
-       <tbody>
-       {% for user in users %}
-          <tr>
-              {% for info in user %}
-                  <td class="sonata-ba-list-field sonata-ba-list-field-batch">
-                    {{ info }}
-                  </td>
-              {% endfor %}
 
-          </tr>
-       {% endfor %}
-       <tr>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-       </tr>
-       <tr>
-           <td>Total</td>
-           {% for photo in photos %}
-               <td>{{ photo.ph }}</td>
-               <td>{{ photo.ph }}</td>
-           {% endfor %}
-           {% for photo in reaction %}
-               <td>{{ photo.ph }}</td>
-               <td>{{ photo.ph }}</td>
-           {% endfor %}
-       </tr>
-       <tr>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-       </tr>
-       <tr>
-           <td>
-               <b>From :</b>
-           </td>
-           <td>{{ from }}</td>
-           <td></td>
-           <td></td>
-           <td></td>
-       </tr>
-       <tr>
-           <td>
-               <b>To :</b>
-           </td>
-           <td>{{ to }}</td>
-           <td></td>
-           <td></td>
-           <td></td>
-       </tr>
-       </tbody>
-    </table>
-    {% endblock %}
     <form class="form-horizontal" action="{{ path('all_photo_list') }}" method="POST">
         {% if form.vars.errors|length > 0 %}
             <div class="sonata-ba-form-error">
@@ -85,7 +18,7 @@
             </div>
         {% endif %}
 
-        <div class="tab-content">
+        <div class="tab-content" style="margin-left: -100px">
             <div class="tab-pane active">
                 <fieldset>
                     <div class="sonata-ba-collapsed-fields">
@@ -114,9 +47,58 @@
         </div>
 
         {{ form_rest(form) }}
-
-        <div class="well well-small form-actions">
-            <input type="submit" class="btn btn-primary" value="Show"/>
-        </div>
+        <input type="submit" class="btn btn-primary" value="Show"/>
     </form>
+    <h4 style="text-align: center"><b>From : {{ from }} </b>&nbsp <b>To : {{ to }}</b></h4>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr class="sonata-ba-list-field-header">
+            <th class="sonata-ba-list-field-header-text">Username</th>
+            <th class="sonata-ba-list-field-header-text">Sent photos</th>
+            <th class="sonata-ba-list-field-header-text">Received photos</th>
+            <th class="sonata-ba-list-field-header-text">Sent reaction photos</th>
+            <th class="sonata-ba-list-field-header-text">Received reaction photos</th>
+        </tr>
+        </thead>
+        <tr>
+            <td>Total</td>
+            {% for photo in photos %}
+                <td>{{ photo.ph }}</td>
+                <td>{{ photo.ph }}</td>
+            {% endfor %}
+            {% for photo in reaction %}
+                <td>{{ photo.ph }}</td>
+                <td>{{ photo.ph }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <table class="table table-bordered table-striped">
+    {% block table_body %}
+        <thead>
+        <tr class="sonata-ba-list-field-header">
+            <th class="sonata-ba-list-field-header-text">Username</th>
+            <th class="sonata-ba-list-field-header-text">Sent photos</th>
+            <th class="sonata-ba-list-field-header-text">Received photos</th>
+            <th class="sonata-ba-list-field-header-text">Sent reaction photos</th>
+            <th class="sonata-ba-list-field-header-text">Received reaction photos</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for user in users %}
+            <tr>
+                {% for info in user %}
+                    <td class="sonata-ba-list-field sonata-ba-list-field-batch">
+                        {{ info }}
+                    </td>
+                {% endfor %}
+
+            </tr>
+        {% endfor %}
+
+        </tbody>
+        </table>
+    {% endblock %}
+
 {% endblock %}
