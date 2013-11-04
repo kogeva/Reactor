@@ -52,7 +52,7 @@ class PhotoAdminController extends ContainerAware
         }
         else
         {
-            $to = new \DateTime('now');
+            $to = new \DateTime('+ 1 day');
         }
         $photos = $this->container->get('doctrine')->getEntityManager()
             ->getRepository('Acme\ReactorApiBundle\Entity\Message')->getAllPhotoInDate($from, $to);
