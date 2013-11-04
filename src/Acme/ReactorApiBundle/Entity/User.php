@@ -19,7 +19,7 @@ class User
         $this->sentMessagesNum = 0;
         foreach ($this->fromUser as $message)
         {
-            if ( ($message->getCreatedAt()->format('c') >= $from) && ($message->getCreatedAt()->format('c') <= $to) )
+            if ( ($message->getCreatedAt()->format('Y-m-d H:m:s') >= $from) && ($message->getCreatedAt()->format('Y-m-d H:m:s') <= $to) )
                 if ($message->getReactionPhoto() === null)
                     $this->sentMessagesNum++;
         }
@@ -31,7 +31,7 @@ class User
         $this->receivedMessagesNum = 0;
         foreach ($this->toUser as $message)
         {
-            if ( ($message->getCreatedAt()->format('c') >= $from) && ($message->getCreatedAt()->format('c') <= $to) )
+            if ( ($message->getCreatedAt()->format('Y-m-d H:m:s') >= $from) && ($message->getCreatedAt()->format('Y-m-d H:m:s') <= $to) )
                 if ($message->getReactionPhoto() === null)
                     $this->receivedMessagesNum++;
         }
@@ -42,7 +42,7 @@ class User
 
         foreach ($this->fromUser as $photo)
         {
-            if ($photo->getReactionPhoto() != null && $photo->getCreatedAt()->format('c') >= $from && $photo->getCreatedAt()->format('c') <= $to)
+            if ($photo->getReactionPhoto() != null && $photo->getCreatedAt()->format('Y-m-d H:m:s') >= $from && $photo->getCreatedAt()->format('Y-m-d H:m:s') <= $to)
                 $this->sentReactionPhotoNum[] = $photo->getReactionPhoto();
         }
         return count($this->sentReactionPhotoNum);
@@ -52,7 +52,7 @@ class User
     {
         foreach ($this->toUser as $photo)
         {
-            if ($photo->getReactionPhoto() != null && $photo->getCreatedAt()->format('c') >= $from && $photo->getCreatedAt()->format('c') <= $to)
+            if ($photo->getReactionPhoto() != null && $photo->getCreatedAt()->format('Y-m-d H:m:s') >= $from && $photo->getCreatedAt()->format('Y-m-d H:m:s') <= $to)
                 $this->receivedReactionPhotoNum[] = $photo->getReactionPhoto();
         }
         return count($this->receivedReactionPhotoNum);

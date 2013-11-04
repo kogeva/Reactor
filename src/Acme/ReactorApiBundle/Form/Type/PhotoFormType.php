@@ -10,7 +10,7 @@ class PhotoFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('From', 'date', array('input' => 'datetime', 'required' => false, 'data' => new \DateTime('2013-09-01')))
+            ->add('From', 'date', array('input' => 'datetime', 'required' => false, 'data' => new \DateTime('2013-09-01 00:00:00')))
             ->add('To', 'date', array('input' => 'datetime', 'required' => false, 'data' => new \DateTime('+ 1 day')));
     }
 
