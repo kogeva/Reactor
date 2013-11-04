@@ -47,7 +47,7 @@ class PhotoAdminController extends ContainerAware
                     $dateTo.= $fr . '-';
                 else
                     $dateTo.= $fr;
-            $dateTo.= ' 00:00:00';
+            $dateTo.= ' 23:59:59';
             $to = new \DateTime($dateTo);
         }
         else
@@ -63,10 +63,10 @@ class PhotoAdminController extends ContainerAware
         foreach($users as $key => $user)
         {
             $listPhotos[$key]['username'] = $user->getUsername();
-            $listPhotos[$key]['sent'] = $user->sentMessagesNum($from->format('Y-m-d'), $to->format('Y-m-d'));
-            $listPhotos[$key]['received'] = $user->receivedMessagesNum($from->format('Y-m-d'), $to->format('Y-m-d'));
-            $listPhotos[$key]['sentR'] = $user->sentReactionPhotoNum($from->format('Y-m-d'), $to->format('Y-m-d'));
-            $listPhotos[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d'), $to->format('Y-m-d'));
+            $listPhotos[$key]['sent'] = $user->sentMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            $listPhotos[$key]['received'] = $user->receivedMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            $listPhotos[$key]['sentR'] = $user->sentReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            $listPhotos[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
         }
 
         return $this->container->get('templating')->renderResponse(
