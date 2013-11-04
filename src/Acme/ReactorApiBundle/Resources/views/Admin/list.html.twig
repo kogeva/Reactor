@@ -59,6 +59,7 @@
             <th class="sonata-ba-list-field-header-text">Received photos</th>
             <th class="sonata-ba-list-field-header-text">Sent reaction photos</th>
             <th class="sonata-ba-list-field-header-text">Received reaction photos</th>
+            <th class="sonata-ba-list-field-header-text">Users</th>
         </tr>
         </thead>
         <tr>
@@ -71,6 +72,7 @@
                 <td>{{ photo.ph }}</td>
                 <td>{{ photo.ph }}</td>
             {% endfor %}
+                <td>{{ count_user }}</td>
         </tr>
     </table>
     <table class="table table-bordered table-striped">

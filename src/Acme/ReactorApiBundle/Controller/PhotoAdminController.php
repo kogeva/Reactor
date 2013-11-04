@@ -78,7 +78,8 @@ class PhotoAdminController extends ContainerAware
                 'photos'     => $photos,
                 'reaction'   => $reactionPhotos,
                 'from'       => $from->format('Y-m-d'),
-                'to'         => $to->format('Y-m-d')
+                'to'         => $to->format('Y-m-d'),
+                'count_user' => count($users)
             )
         );
     }
