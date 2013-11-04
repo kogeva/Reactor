@@ -73,7 +73,9 @@ class PhotoAdminController extends ContainerAware
                 'admin_pool' => $adminPool,
                 'users'      =>     $listPhotos,
                 'form' 		 => $form->createView(),
-                'photos'     => $photos
+                'photos'     => $photos,
+                'from'       => $from->format('Y-m-d'),
+                'to'         => $to->format('Y-m-d')
             )
         );
     }
