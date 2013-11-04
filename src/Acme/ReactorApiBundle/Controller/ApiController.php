@@ -33,12 +33,13 @@ class ApiController extends Controller
                 $user = new User();
                 $user->setUsername($userName);
                 $user->setEmail($email);
-                $user->setPassword(md5($password));
                 $user->setPhone($phone);
                 $user->setDeviceToken($deviceToken);
                 $user->setPrivacyMessage(true);
                 $user->setSessionHash(md5(time()));
                 $user->setCreatedAt(new \DateTime());
+                $pass = base64_encode($password.'|'.$user->getCreatedAt()->format('c').$user->getUsername());
+                $user->setPassword($pass);
 
                 $validator = $this->get('validator');
                 $errors =  $validator->validate($user);
@@ -94,7 +95,28 @@ class ApiController extends Controller
             if(!$user)
                 return new JsonResponse(array( 'status' => 'failed', 'error' => 'Email not found'));
 
+            $pass = base64_encode($password.'|'.$user->getCreatedAt()->format('c').$user->getUsername());
+
             if($user->getPassword() === md5($password))
+            {
+                $user->setSessionHash(md5(time()));
+                $user->setPassword($pass);
+                $user->setDeviceToken($deviceToken);
+
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($user);
+                $em->flush();
+
+                return new JsonResponse(array(
+                    'status' => 'success',
+                    'user_id' => $user->getId(),
+                    'session_hash' => $user->getSessionHash(),
+                    'privacy_message' => $user->getPrivacyMessage(),
+                    'username' => $user->getUsername(),
+                    'phone' => $user->getPhone()
+                ));
+            }
+            elseif ($user->getPassword() === $pass)
             {
                 $user->setSessionHash(md5(time()));
                 $user->setDeviceToken($deviceToken);
@@ -687,6 +709,42 @@ class ApiController extends Controller
 
         }
         return new JsonResponse(array( 'status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
+
+    public function remindPasswordAction()
+    {
+        $request = $this->container->get('request')->request;
+        $email = $request->get('email');
+        $phone = $request->get('phone');
+
+        if ($email)
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('email' => $email));
+        elseif ($phone)
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('phone' => $phone));
+
+        $password = $user->getPassword();
+        $decode = base64_decode($password);
+
+        $decodePass = explode('|',$decode);
+        $this->sendRemindPassword($user, $decodePass[0]);
+
+        return new JsonResponse(array( 'status' => 'success', 'password' => $decodePass[0]));
+    }
+
+    protected function sendRemindPassword($user, $password)
+    {
+        $email_message = \Swift_Message::newInstance()
+            ->setSubject('Remind password')
+            ->setFrom(array('no-reply@reactrapp.com' => 'Reactr'))
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->renderView('AcmeReactorApiBundle:Api:remind.html.twig',
+                    array('username' => $user->getUsername(),
+                        'password' => $password
+                    )),'text/html'
+            );
+
+        $this->get('mailer')->send($email_message);
     }
 
 
