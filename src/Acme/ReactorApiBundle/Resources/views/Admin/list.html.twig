@@ -44,8 +44,10 @@
            {% for photo in photos %}
                <td>{{ photo.ph }}</td>
                <td>{{ photo.ph }}</td>
-               <td>{{ photo.rPh }}</td>
-               <td>{{ photo.rPh }}</td>
+           {% endfor %}
+           {% for photo in reaction %}
+               <td>{{ photo.ph }}</td>
+               <td>{{ photo.ph }}</td>
            {% endfor %}
        </tr>
        <tr>

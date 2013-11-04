@@ -56,6 +56,8 @@ class PhotoAdminController extends ContainerAware
         }
         $photos = $this->container->get('doctrine')->getEntityManager()
             ->getRepository('Acme\ReactorApiBundle\Entity\Message')->getAllPhotoInDate($from, $to);
+        $reactionPhotos = $this->container->get('doctrine')->getEntityManager()
+            ->getRepository('Acme\ReactorApiBundle\Entity\Message')->getAllReactionPhotoInDate($from, $to);
         $listPhotos = array();
 
         foreach($users as $key => $user)
@@ -74,6 +76,7 @@ class PhotoAdminController extends ContainerAware
                 'users'      =>     $listPhotos,
                 'form' 		 => $form->createView(),
                 'photos'     => $photos,
+                'reaction'   => $reactionPhotos,
                 'from'       => $from->format('Y-m-d'),
                 'to'         => $to->format('Y-m-d')
             )

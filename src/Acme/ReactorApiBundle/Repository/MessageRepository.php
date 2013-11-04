@@ -75,7 +75,21 @@ class MessageRepository extends EntityRepository
     {
         $messages = $this->getEntityManager()
             ->createQuery('
-                    SELECT count(ms.photo) as ph, count(ms.reaction_photo) as rPh
+                    SELECT count(ms.photo) as ph
+                    FROM AcmeReactorApiBundle:Message ms
+                    WHERE ms.created_at >= :from AND ms.created_at <= :to
+                    AND ms.reaction_photo is null
+                    ')
+            ->setParameters(array('from' => $from, 'to' => $to))
+            ->getResult();
+        return $messages;
+    }
+
+    public function getAllReactionPhotoInDate($from, $to)
+    {
+        $messages = $this->getEntityManager()
+            ->createQuery('
+                    SELECT count(ms.reaction_photo) as ph
                     FROM AcmeReactorApiBundle:Message ms
                     WHERE ms.created_at >= :from AND ms.created_at <= :to
                     ')

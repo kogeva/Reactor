@@ -20,7 +20,8 @@ class User
         foreach ($this->fromUser as $message)
         {
             if ( ($message->getCreatedAt()->format('c') >= $from) && ($message->getCreatedAt()->format('c') <= $to) )
-                $this->sentMessagesNum++;
+                if ($message->getReactionPhoto() === null)
+                    $this->sentMessagesNum++;
         }
         return $this->sentMessagesNum;
     }
@@ -31,7 +32,8 @@ class User
         foreach ($this->toUser as $message)
         {
             if ( ($message->getCreatedAt()->format('c') >= $from) && ($message->getCreatedAt()->format('c') <= $to) )
-                $this->receivedMessagesNum++;
+                if ($message->getReactionPhoto() === null)
+                    $this->receivedMessagesNum++;
         }
         return $this->receivedMessagesNum;
     }
