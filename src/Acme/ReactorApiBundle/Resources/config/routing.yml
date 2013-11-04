@@ -75,7 +75,7 @@ delete_message:
   defaults: { _controller: AcmeReactorApiBundle:Api:deleteMessage }
 
 all_photo_list:
-     pattern:      /admin/acme/reactorapi/staticinfo/list
+     pattern:      /admin/acme/reactorapi/photo/list
      defaults:     { _controller: AcmeReactorApiBundle:PhotoAdmin:photoList }
 
 remind_password:
