@@ -66,7 +66,6 @@ class ApiController extends Controller
                     ->setBody(
                         $this->renderView('AcmeReactorApiBundle:Api:email.html.twig',
                             array('username' => $userName,
-                                'password' => $password,
                                 'staticInfo' => $info)),'text/html'
                     );
 
