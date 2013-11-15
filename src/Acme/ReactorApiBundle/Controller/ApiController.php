@@ -721,7 +721,7 @@ class ApiController extends Controller
         elseif ($phone)
             $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('phone' => $phone));
 
-        $reset_url = 'http://localhost/Curl/reset.php?username='.base64_encode($user->getUsername()).'&reset='.md5($user->getUsername().$user->getSessionHash());
+        $reset_url = 'http://reactrapp.com/reset.php?username='.base64_encode($user->getUsername()).'&reset='.md5($user->getUsername().$user->getSessionHash());
         $this->sendRemindPassword($user, $reset_url);
 
         return new JsonResponse(array( 'status' => 'success'));
