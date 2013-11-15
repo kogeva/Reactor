@@ -721,16 +721,13 @@ class ApiController extends Controller
         elseif ($phone)
             $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('phone' => $phone));
 
-        $password = $user->getPassword();
-        $decode = base64_decode($password);
+        $reset_url = 'http://localhost/Curl/reset.php?username='.base64_encode($user->getUsername()).'&reset='.md5($user->getUsername().$user->getSessionHash());
+        $this->sendRemindPassword($user, $reset_url);
 
-        $decodePass = explode('|',$decode);
-        $this->sendRemindPassword($user, $decodePass[0]);
-
-        return new JsonResponse(array( 'status' => 'success', 'password' => $decodePass[0]));
+        return new JsonResponse(array( 'status' => 'success'));
     }
 
-    protected function sendRemindPassword($user, $password)
+    protected function sendRemindPassword($user, $url)
     {
         $email_message = \Swift_Message::newInstance()
             ->setSubject('Remind password')
@@ -739,11 +736,28 @@ class ApiController extends Controller
             ->setBody(
                 $this->renderView('AcmeReactorApiBundle:Api:remind.html.twig',
                     array('username' => $user->getUsername(),
-                        'password' => $password
+                        'url' => $url
                     )),'text/html'
             );
 
         $this->get('mailer')->send($email_message);
+    }
+
+    public function resetPasswordAction()
+    {
+        $request = $this->container->get('request')->request;
+        $username = $request->get('username');
+        $password = $request->get('password');
+
+        $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('username' => $username));
+        $password = base64_encode($password.'|'.$user->getCreatedAt()->format('c').$user->getUsername());
+        $user->setPassword($password);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($user);
+        $em->flush();
+
+        return new JsonResponse('Password changed');
     }
 
 

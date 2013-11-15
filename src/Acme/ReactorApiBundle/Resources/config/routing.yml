@@ -81,3 +81,7 @@ all_photo_list:
 remind_password:
   pattern: /remindPassword/
   defaults: { _controller: AcmeReactorApiBundle:Api:remindPassword }
+
+reset_password:
+  pattern: /resetPassword/
+  defaults: { _controller: AcmeReactorApiBundle:Api:resetPassword }
