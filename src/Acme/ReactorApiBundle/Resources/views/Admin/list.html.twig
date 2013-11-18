@@ -1,6 +1,9 @@
 {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 
-{% block title %}Photo statistic{% endblock%}
+{% block title %}
+    Photo statistic
+    <link rel="icon" href="/reactr_logo.png"/>
+{% endblock%}
 
 {% block breadcrumb %}
     <li>
@@ -9,6 +12,7 @@
     </li>
     <li class="active">Photo list</li>
 {% endblock %}
+
 {% block content %}
 
     <form class="form-horizontal" action="{{ path('all_photo_list') }}" method="POST">
@@ -72,7 +76,7 @@
                 <td>{{ photo.ph }}</td>
                 <td>{{ photo.ph }}</td>
             {% endfor %}
-                <td>{{ count_user }}</td>
+            <td>{{ count_user }}</td>
         </tr>
     </table>
     <table class="table table-bordered table-striped">
@@ -104,5 +108,25 @@
         </tbody>
         </table>
     {% endblock %}
+
+    <table class="table table-bordered table-striped">
+        <tbody>
+        <tr>
+            <td colspan="5">
+                <div class="pagination pagination-centered">
+                    <ul>
+                        {% for page in pages %}
+                            {% if page == curr_page %}
+                                <li class="active"><a href="{{ url('all_photo_list', {page: page}) }}{{ get_string }}">{{ page }}</a></li>
+                            {% else %}
+                                <li><a href="{{ url('all_photo_list', {page: page}) }}{{ get_string }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 {% endblock %}
