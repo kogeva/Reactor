@@ -120,6 +120,8 @@ class PhotoAdminController extends ContainerAware
             $listPhotos[$key]['sentR'] = $user->sentReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
             $listPhotos[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
         }
+        var_dump($pageFrom);
+        var_dump($pageTo);
 
         return $this->container->get('templating')->renderResponse(
             'AcmeReactorApiBundle:Admin:list.html.twig',
