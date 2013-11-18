@@ -61,8 +61,8 @@ class UserRepository extends EntityRepository
                 FROM AcmeReactorApiBundle:User u
                 WHERE u.created_at >= :from AND u.created_at <= :to'
             )
-            ->setFirstResult($first)
-            ->setMaxResults($max)
+            ->setFirstResult((int)$first)
+            ->setMaxResults((int)$max)
             ->setParameters(array('from' => $from, 'to' => $to))
             ->getResult();
         return $users;
