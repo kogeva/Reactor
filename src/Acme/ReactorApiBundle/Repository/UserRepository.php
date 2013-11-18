@@ -59,7 +59,7 @@ class UserRepository extends EntityRepository
             ->createQuery('
                 SELECT u
                 FROM AcmeReactorApiBundle:User u
-                WHERE u.created_at >= :from AND u.created_at <= :to
+                WHERE u.created_at <= :to
 '
             )
             ->setParameters(array('from' => $from, 'to' => $to))
@@ -73,7 +73,7 @@ class UserRepository extends EntityRepository
             ->createQuery('
                 SELECT u
                 FROM AcmeReactorApiBundle:User u
-                WHERE u.created_at >= :from AND u.created_at <= :to'
+                WHERE u.created_at <= :to'
             )
             ->setParameters(array('from' => $from, 'to' => $to))
             ->getResult();
