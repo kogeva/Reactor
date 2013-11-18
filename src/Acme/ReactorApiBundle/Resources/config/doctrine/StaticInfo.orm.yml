@@ -19,3 +19,8 @@ Acme\ReactorApiBundle\Entity\StaticInfo:
     email_subject:
       type: string
       length: 30
+    email_body_remind:
+      type: text
+    email_subject_remind:
+      type: string
+      length: 30

@@ -18,8 +18,10 @@ class StaticInfoAdmin extends Admin
             ->add('privacy')
             ->add('terms')
             ->add('contact_us')
-            ->add('email_body')
-            ->add('email_subject')
+            ->add('email_body', null, array('label' => 'Welcome email body'))
+            ->add('email_subject', null, array('label' => 'Welcome email subject'))
+            ->add('email_body_remind', null, array('label' => 'Reset email body'))
+            ->add('email_subject_remind', null, array('label' => 'Reset email subject'))
         ;
     }
 
@@ -30,8 +32,10 @@ class StaticInfoAdmin extends Admin
             ->add('Privacy')
             ->add('Terms')
             ->add('Contact Us')
-            ->add('email_body')
-            ->add('email_subject')
+            ->add('email_body', null, array('label' => 'Welcome email body'))
+            ->add('email_subject', null, array('label' => 'Welcome email subject'))
+            ->add('email_body_remind', null, array('label' => 'Reset email body'))
+            ->add('email_subject_remind', null, array('label' => 'Reset email subject'))
         ;
     }
 }

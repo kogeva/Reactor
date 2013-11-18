@@ -730,13 +730,17 @@ class ApiController extends Controller
 
     protected function sendRemindPassword($user, $url)
     {
+        $staticInfo = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:StaticInfo')->findAll();
+        $info = $staticInfo[0];
+
         $email_message = \Swift_Message::newInstance()
-            ->setSubject('Remind password')
+            ->setSubject($info->getEmailSubject())
             ->setFrom(array('no-reply@reactrapp.com' => 'Reactr'))
             ->setTo($user->getEmail())
             ->setBody(
                 $this->renderView('AcmeReactorApiBundle:Api:remind.html.twig',
                     array('username' => $user->getUsername(),
+                        'staticInfo' => $info,
                         'url' => $url
                     )),'text/html'
             );

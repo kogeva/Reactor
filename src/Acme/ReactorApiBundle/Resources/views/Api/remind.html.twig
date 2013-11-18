@@ -1,6 +1,6 @@
 {% block content %}
     {% block body %}
-        Thank you for using Reactr
+        {{ staticInfo.EmailBodyRemind | raw }} <br><br>
         <p> <b>Link to reset password :</b> {{ url }} </p>
     {% endblock %}
 {% endblock %}
