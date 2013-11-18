@@ -721,17 +721,14 @@ class ApiController extends Controller
         elseif ($phone)
             $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->findOneBy(array('phone' => $phone));
 
-        //$reset_url = 'http://reactrapp.com/reset.php?username='.base64_encode($user->getUsername()).'&reset='.md5($user->getUsername().$user->getSessionHash());
-        $password = $user->getPassword();
-        $decode = base64_decode($password);
+        $reset_url = 'http://reactrapp.com/reset.php?username='.base64_encode($user->getUsername()).'&reset='.md5($user->getUsername().$user->getSessionHash()).'&time='.(time() + 10800);
 
-        $decodePass = explode('|',$decode);
-        $this->sendRemindPassword($user, $decodePass[0]);
+        $this->sendRemindPassword($user, $reset_url);
 
         return new JsonResponse(array( 'status' => 'success'));
     }
 
-    protected function sendRemindPassword($user, $password)
+    protected function sendRemindPassword($user, $url)
     {
         $email_message = \Swift_Message::newInstance()
             ->setSubject('Remind password')
@@ -740,7 +737,7 @@ class ApiController extends Controller
             ->setBody(
                 $this->renderView('AcmeReactorApiBundle:Api:remind.html.twig',
                     array('username' => $user->getUsername(),
-                        'password' => $password
+                        'url' => $url
                     )),'text/html'
             );
 
