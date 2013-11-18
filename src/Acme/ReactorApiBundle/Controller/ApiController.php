@@ -734,7 +734,7 @@ class ApiController extends Controller
         $info = $staticInfo[0];
 
         $email_message = \Swift_Message::newInstance()
-            ->setSubject($info->getEmailSubject())
+            ->setSubject($info->getEmailSubjectRemind())
             ->setFrom(array('no-reply@reactrapp.com' => 'Reactr'))
             ->setTo($user->getEmail())
             ->setBody(
