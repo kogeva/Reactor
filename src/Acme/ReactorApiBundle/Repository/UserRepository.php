@@ -62,7 +62,7 @@ class UserRepository extends EntityRepository
                 WHERE u.created_at <= :to
 '
             )
-            ->setParameters(array('from' => $from, 'to' => $to))
+            ->setParameters(array('to' => $to))
             ->getResult();
         return $users;
     }
@@ -75,7 +75,7 @@ class UserRepository extends EntityRepository
                 FROM AcmeReactorApiBundle:User u
                 WHERE u.created_at <= :to'
             )
-            ->setParameters(array('from' => $from, 'to' => $to))
+            ->setParameters(array('to' => $to))
             ->getResult();
         return $users;
     }
