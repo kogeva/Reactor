@@ -3,7 +3,6 @@
 namespace Acme\ReactorApiBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * UserRepository
@@ -62,11 +61,11 @@ class UserRepository extends EntityRepository
                 FROM AcmeReactorApiBundle:User u
                 WHERE u.created_at >= :from AND u.created_at <= :to'
             )
-            ->setParameters(array('from' => $from, 'to' => $to));
-        $count = Paginate::getTotalQueryResults($users); // Step 1
-        $paginateQuery = Paginate::getPaginateQuery($users, $first, $max); // Step 2 and 3
-        $result = $paginateQuery->getResult();
-        return $result;
+            ->setFirstResult($first)
+            ->setMaxResults($max)
+            ->setParameters(array('from' => $from, 'to' => $to))
+            ->getResult();
+        return $users;
     }
 
     public function findAllUsersInDate($from, $to)
