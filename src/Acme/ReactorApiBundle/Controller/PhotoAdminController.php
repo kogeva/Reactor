@@ -14,7 +14,6 @@ class PhotoAdminController extends ContainerAware
     public function photoListAction($page)
     {
         $adminPool = $this->container->get('sonata.admin.pool');
-        $form = $this->container->get('form.factory')->create(new PhotoFormType());
         $request = $this->container->get('request');
 
         $requestData = $request->request->get('reactr_photo_list');
@@ -89,7 +88,7 @@ class PhotoAdminController extends ContainerAware
                     $from = new \DateTime($_GET['from']);
 
                 }*/
-
+        $form = $this->container->get('form.factory')->create(new PhotoFormType(), array('from' => $from, 'to' => $to));
 
         $users = $this->container->get('doctrine')->getEntityManager()
             ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateFromTo($from, $to);
