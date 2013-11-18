@@ -92,7 +92,7 @@ class PhotoAdminController extends ContainerAware
 
 
         $users = $this->container->get('doctrine')->getEntityManager()
-            ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateFromTo($from, $to, $pageFrom, $pageTo);
+            ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateFromTo($from, $to);
 
         $countUsers = $this->container->get('doctrine')->getEntityManager()
             ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDate($from, $to);
@@ -112,16 +112,17 @@ class PhotoAdminController extends ContainerAware
 
         foreach($users as $key => $user)
         {
-            $listPhotos[$key]['phone'] = $user->getPhone();
-            $listPhotos[$key]['email'] = $user->getEmail();
-            $listPhotos[$key]['username'] = $user->getUsername();
-            $listPhotos[$key]['sent'] = $user->sentMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
-            $listPhotos[$key]['received'] = $user->receivedMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
-            $listPhotos[$key]['sentR'] = $user->sentReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
-            $listPhotos[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            if ($key>=$pageFrom && $key<$pageTo)
+            {
+                $listPhotos[$key]['phone'] = $user->getPhone();
+                $listPhotos[$key]['email'] = $user->getEmail();
+                $listPhotos[$key]['username'] = $user->getUsername();
+                $listPhotos[$key]['sent'] = $user->sentMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+                $listPhotos[$key]['received'] = $user->receivedMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+                $listPhotos[$key]['sentR'] = $user->sentReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+                $listPhotos[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            }
         }
-        var_dump($pageFrom);
-        var_dump($pageTo);
 
         return $this->container->get('templating')->renderResponse(
             'AcmeReactorApiBundle:Admin:list.html.twig',

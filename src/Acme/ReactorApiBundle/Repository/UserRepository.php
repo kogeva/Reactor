@@ -53,16 +53,15 @@ class UserRepository extends EntityRepository
                   OR u.email = :email'
             )->setParameters(array('username' => $username, 'email' => $email))->getArrayResult();
     }
-    public function findAllUsersInDateFromTo($from, $to, $first, $max)
+    public function findAllUsersInDateFromTo($from, $to)
     {
         $users = $this->getEntityManager()
             ->createQuery('
                 SELECT u
                 FROM AcmeReactorApiBundle:User u
-                WHERE u.created_at >= :from AND u.created_at <= :to'
+                WHERE u.created_at >= :from AND u.created_at <= :to
+'
             )
-            ->setFirstResult((int)$first)
-            ->setMaxResults((int)$max)
             ->setParameters(array('from' => $from, 'to' => $to))
             ->getResult();
         return $users;
