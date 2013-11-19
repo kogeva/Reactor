@@ -26,9 +26,15 @@ class PhotoAdminController extends ContainerAware
         {
             $type = $requestData['type'];
             if (isset($requestData['search']))
+            {
                 $search = $requestData['search'];
+            }
         }
-
+        if (isset($_GET['field']) && isset($_GET['string']))
+        {
+            $type = $_GET['field'];
+            $search = $_GET['string'];
+        }
         $dateFrom = '';
         $dateTo = '';
         if ($page == '1')
@@ -98,6 +104,7 @@ class PhotoAdminController extends ContainerAware
 
         if (isset($search) && $search && isset($type) && $type)
         {
+            $get_string.= '&field='.$type.'&string='.$search;
             switch($type)
             {
                 case 'Phone':
