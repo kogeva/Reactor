@@ -67,6 +67,48 @@ class UserRepository extends EntityRepository
         return $users;
     }
 
+    public function findAllUsersInDateName($from, $to, $username)
+    {
+        $users = $this->getEntityManager()
+            ->createQuery('
+                SELECT u
+                FROM AcmeReactorApiBundle:User u
+                WHERE u.created_at <= :to
+                AND u.username LIKE :username'
+            )
+            ->setParameters(array('to' => $to, 'username' => '%'.$username.'%'))
+            ->getResult();
+        return $users;
+    }
+
+    public function findAllUsersInDateEmail($from, $to, $email)
+    {
+        $users = $this->getEntityManager()
+            ->createQuery('
+                SELECT u
+                FROM AcmeReactorApiBundle:User u
+                WHERE u.created_at <= :to
+                AND u.email LIKE :username'
+            )
+            ->setParameters(array('to' => $to, 'username' => '%'.$email.'%'))
+            ->getResult();
+        return $users;
+    }
+
+    public function findAllUsersInDatePhone($from, $to, $phone)
+    {
+        $users = $this->getEntityManager()
+            ->createQuery('
+                SELECT u
+                FROM AcmeReactorApiBundle:User u
+                WHERE u.created_at <= :to
+                AND u.phone LIKE :username'
+            )
+            ->setParameters(array('to' => $to, 'username' => '%'.$phone.'%'))
+            ->getResult();
+        return $users;
+    }
+
     public function findAllUsersInDate($from, $to)
     {
         $users = $this->getEntityManager()

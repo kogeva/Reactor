@@ -17,8 +17,18 @@ class PhotoAdminController extends ContainerAware
         $request = $this->container->get('request');
 
         $requestData = $request->request->get('reactr_photo_list');
+
         $from = $requestData['From'];
         $to = $requestData['To'];
+        $search = '';
+        $type = '';
+        if (isset($requestData['type']))
+        {
+            $type = $requestData['type'];
+            if (isset($requestData['search']))
+                $search = $requestData['search'];
+        }
+
         $dateFrom = '';
         $dateTo = '';
         if ($page == '1')
@@ -83,18 +93,42 @@ class PhotoAdminController extends ContainerAware
             }
 
         }
-        /*        else
-                {
-                    $from = new \DateTime($_GET['from']);
+        $form = $this->container->get('form.factory')->create(new PhotoFormType(), array('from' => $from, 'to' => $to, 'search' => $search, 'field' => $type));
 
-                }*/
-        $form = $this->container->get('form.factory')->create(new PhotoFormType(), array('from' => $from, 'to' => $to));
 
-        $users = $this->container->get('doctrine')->getEntityManager()
-            ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateFromTo($from, $to);
+        if (isset($search) && $search && isset($type) && $type)
+        {
+            switch($type)
+            {
+                case 'Phone':
+                    $users = $this->container->get('doctrine')->getEntityManager()
+                        ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDatePhone($from, $to, $search);
 
-        $countUsers = $this->container->get('doctrine')->getEntityManager()
-            ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDate($from, $to);
+                    $countUsers = $users;
+                    break;
+                case 'Email':
+                    $users = $this->container->get('doctrine')->getEntityManager()
+                        ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateEmail($from, $to, $search);
+
+                    $countUsers = $users;
+                    break;
+                case 'Username':
+                    $users = $this->container->get('doctrine')->getEntityManager()
+                        ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateName($from, $to, $search);
+
+                    $countUsers = $users;
+                    break;
+            }
+        }
+        else
+        {
+            $users = $this->container->get('doctrine')->getEntityManager()
+                ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateFromTo($from, $to, $pageFrom, $pageTo);
+
+            $countUsers = $this->container->get('doctrine')->getEntityManager()
+                ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDate($from, $to);
+        }
+
 
         $pages = count($countUsers)/15;
         $pages = intval($pages);
