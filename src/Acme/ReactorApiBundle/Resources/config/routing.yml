@@ -78,6 +78,10 @@ all_photo_list:
      pattern:      /admin/acme/reactorapi/photo/list/{page}
      defaults:     { _controller: AcmeReactorApiBundle:PhotoAdmin:photoList, page:1 }
 
+xml_table:
+     pattern:      /admin/acme/reactorapi/dowload/xml/{data}
+     defaults:     { _controller: AcmeReactorApiBundle:PhotoAdmin:getXmlTable, data: 1 }
+
 remind_password:
   pattern: /remindPassword/
   defaults: { _controller: AcmeReactorApiBundle:Api:remindPassword }

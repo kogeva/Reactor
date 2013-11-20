@@ -163,6 +163,18 @@ class PhotoAdminController extends ContainerAware
                 $listPhotos[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
             }
         }
+        $userss = array();
+        foreach($users as $key => $user)
+        {
+            $userss[$key]['phone'] = $user->getPhone();
+            $userss[$key]['email'] = $user->getEmail();
+            $userss[$key]['username'] = $user->getUsername();
+            $userss[$key]['sent'] = $user->sentMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            $userss[$key]['received'] = $user->receivedMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            $userss[$key]['sentR'] = $user->sentReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+            $userss[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
+        }
+
 
         return $this->container->get('templating')->renderResponse(
             'AcmeReactorApiBundle:Admin:list.html.twig',
@@ -177,8 +189,56 @@ class PhotoAdminController extends ContainerAware
                 'count_user' => count($countUsers),
                 'pages'      => $countPages,
                 'curr_page'  => $page,
-                'get_string' => $get_string
+                'get_string' => $get_string,
+                'xml_users'  => json_encode($userss)
             )
         );
+    }
+
+    public function getXmlTableAction($data)
+    {
+        $excelService = $this->container->get('xls.service_xls5');
+
+        $excelService->excelObj->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Phone')
+            ->setCellValue('B1', 'Email')
+            ->setCellValue('C1', 'username')
+            ->setCellValue('D1', 'sent')
+            ->setCellValue('E1', 'received')
+            ->setCellValue('F1', 'sentR')
+            ->setCellValue('G1', 'receivedR');
+
+        $data = json_decode($data);
+
+        $a = 2;
+        for($i=0;$i<count($data);$i++)
+        {
+            $a++;
+            $d = get_object_vars($data[$i]);
+            $excelService->excelObj->setActiveSheetIndex(0)
+                ->setCellValue("A$a", $d['phone'])
+                ->setCellValue("B$a", $d['email'])
+                ->setCellValue("C$a", $d['username'])
+                ->setCellValue("D$a", $d['sent'])
+                ->setCellValue("E$a", $d['received'])
+                ->setCellValue("F$a", $d['sentR'])
+                ->setCellValue("G$a", $d['receivedR'])
+            ;
+        }
+
+        $excelService->excelObj->getActiveSheet()->setTitle('Simple');
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $excelService->excelObj->setActiveSheetIndex(0);
+
+        //create the response
+        $response = $excelService->getResponse();
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=st1dream23.xls');
+
+        // If you are using a https connection, you have to set those two headers and use sendHeaders() for compatibility with IE <9
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+
+        return $response;
     }
 }
