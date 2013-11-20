@@ -175,6 +175,8 @@ class PhotoAdminController extends ContainerAware
             $userss[$key]['receivedR'] = $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s'));
         }
 
+        $datas = array('from' => $from->format('Y-m-d H:m:s'), 'to' => $to->format('Y-m-d H:m:s'), 'field' => $type, 'string' => $search);
+
 
         return $this->container->get('templating')->renderResponse(
             'AcmeReactorApiBundle:Admin:list.html.twig',
@@ -184,45 +186,76 @@ class PhotoAdminController extends ContainerAware
                 'form' 		 => $form->createView(),
                 'photos'     => $photos,
                 'reaction'   => $reactionPhotos,
-                'from'       => $from->format('Y-m-d'),
-                'to'         => $to->format('Y-m-d'),
+                'from'       => $from->format('Y-m-d H:m:s'),
+                'to'         => $to->format('Y-m-d H:m:s'),
                 'count_user' => count($countUsers),
                 'pages'      => $countPages,
                 'curr_page'  => $page,
                 'get_string' => $get_string,
-                'xml_users'  => json_encode($userss)
+                'field'      => $type,
+                'string'     => $search,
+                'xml_users'  => json_encode($datas),
+
             )
         );
     }
 
-    public function getXmlTableAction($data)
+    public function getXmlTableAction($string)
     {
-        $excelService = $this->container->get('xls.service_xls5');
+        $datas = json_decode($string);
+        $data = array();
+        for($i=0;$i<count($datas);$i++)
+        {
+            $data = get_object_vars($datas);
+        }
+        $from = new \DateTime($data['from']);
+        $to = new \DateTime($data['to']);
 
+        if ($data['field'] && $data['string'])
+        {
+            switch($data['field'])
+            {
+                case 'Phone':
+                    $users = $this->container->get('doctrine')->getEntityManager()
+                        ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDatePhone($from, $to, $data['string']);
+                    break;
+                case 'Email':
+                    $users = $this->container->get('doctrine')->getEntityManager()
+                        ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateEmail($from, $to, $data['string']);
+                    break;
+                case 'Username':
+                    $users = $this->container->get('doctrine')->getEntityManager()
+                        ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDateName($from, $to, $data['string']);
+                    break;
+            }
+        }
+        else
+        {
+            $users = $this->container->get('doctrine')->getEntityManager()
+                ->getRepository('Acme\ReactorApiBundle\Entity\User')->findAllUsersInDate($from, $to);
+        }
+        $excelService = $this->container->get('xls.service_xls5');
         $excelService->excelObj->setActiveSheetIndex(0)
             ->setCellValue('A1', 'Phone')
             ->setCellValue('B1', 'Email')
-            ->setCellValue('C1', 'username')
-            ->setCellValue('D1', 'sent')
-            ->setCellValue('E1', 'received')
-            ->setCellValue('F1', 'sentR')
-            ->setCellValue('G1', 'receivedR');
-
-        $data = json_decode($data);
+            ->setCellValue('C1', 'Username')
+            ->setCellValue('D1', 'Sent photos')
+            ->setCellValue('E1', 'Received photos')
+            ->setCellValue('F1', 'Sent reaction photos')
+            ->setCellValue('G1', 'Received reaction photos');
 
         $a = 2;
-        for($i=0;$i<count($data);$i++)
+        foreach($users as $user)
         {
             $a++;
-            $d = get_object_vars($data[$i]);
             $excelService->excelObj->setActiveSheetIndex(0)
-                ->setCellValue("A$a", $d['phone'])
-                ->setCellValue("B$a", $d['email'])
-                ->setCellValue("C$a", $d['username'])
-                ->setCellValue("D$a", $d['sent'])
-                ->setCellValue("E$a", $d['received'])
-                ->setCellValue("F$a", $d['sentR'])
-                ->setCellValue("G$a", $d['receivedR'])
+                ->setCellValue("A$a", $user->getPhone())
+                ->setCellValue("B$a", $user->getEmail())
+                ->setCellValue("C$a", $user->getUsername())
+                ->setCellValue("D$a", $user->sentMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s')))
+                ->setCellValue("E$a", $user->receivedMessagesNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s')))
+                ->setCellValue("F$a", $user->sentReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s')))
+                ->setCellValue("G$a", $user->receivedReactionPhotoNum($from->format('Y-m-d H:m:s'), $to->format('Y-m-d H:m:s')))
             ;
         }
 
@@ -233,7 +266,8 @@ class PhotoAdminController extends ContainerAware
         //create the response
         $response = $excelService->getResponse();
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment;filename=st1dream23.xls');
+        $filename = 'statistic'.date('Ymd');
+        $response->headers->set('Content-Disposition', 'attachment;filename='.$filename.'.xls');
 
         // If you are using a https connection, you have to set those two headers and use sendHeaders() for compatibility with IE <9
         $response->headers->set('Pragma', 'public');
