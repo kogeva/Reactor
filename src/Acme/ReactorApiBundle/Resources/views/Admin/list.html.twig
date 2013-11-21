@@ -50,13 +50,9 @@
         </div>
 
         {{ form_rest(form) }}
-        <input type="submit" class="btn btn-primary" value="Show"/>
+        <input type="submit" class="btn btn-primary" value="Filter results"/>
     </form>
-    <div class="row-fluid m-bot-5">
-        <div class="span6">
-            <a href="{{ url('xml_table', {string: xml_users})  }}" class="btn">Create xls</a>
-        </div>
-    </div>
+
 
 
     <table class="table table-bordered table-striped">
@@ -132,5 +128,11 @@
         </tr>
         </tbody>
     </table>
+
+    <div class="row-fluid m-bot-5">
+        <div class="span6">
+            <a href="{{ url('xml_table', {string: xml_users})  }}" class="btn">Download spreadsheet</a>
+        </div>
+    </div>
 
 {% endblock %}
