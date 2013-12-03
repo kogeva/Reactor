@@ -7,12 +7,22 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class SponsorLogoFormType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
+        if (isset($options['data']['name']) && isset($options['data']['site_url']))
+        {
+            $name = $options['data']['name'];
+            $url  = $options['data']['site_url'];
+        }
+        else
+        {
+            $name = '';
+            $url  = '';
+        }
         $builder
-            ->add('name', 'text', array('data' =>  $options['data']['name']))
-            ->add('site_url', 'text', array('data' =>  $options['data']['site_url']))
+            ->add('name', 'text', array('data' =>  $name))
+            ->add('site_url', 'text', array('data' =>  $url))
             ->add('logo', 'file', array('required' => true, 'label' => 'Logo'));
     }
 

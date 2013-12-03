@@ -9,6 +9,10 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class SponsorAdmin extends Admin
 {
+    public function getExportFormats()
+    {
+        return array('xls');
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
