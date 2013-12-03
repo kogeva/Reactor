@@ -9,6 +9,12 @@
 {% block side_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active'}, 'list') }}{% endblock %}
 
 {% block list_table %}
+    <div class="row-fluid m-bot-5">
+        <div class="span6">
+            <a href="{{ path('new_sponsor') }}" class="btn">Add new sposnsor</a>
+
+        </div>
+    </div>
     {% set batchactions = admin.batchactions %}
     {% if admin.datagrid.results|length > 0 %}
         {% if admin.hasRoute('batch') %}
