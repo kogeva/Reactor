@@ -93,3 +93,7 @@ reset_password:
 get_sponsor:
   pattern: /getSponsor/
   defaults: { _controller: AcmeReactorApiBundle:Api:getSponsor }
+
+sponsor_logo:
+     pattern:      /acme/reactorapi/sponsor/change/{id}
+     defaults:     { _controller: AcmeReactorApiBundle:SponsorAdmin:change }

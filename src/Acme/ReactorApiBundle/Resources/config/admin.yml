@@ -27,3 +27,7 @@ services:
             - 'SonataAdminBundle:CRUD'
         calls:
             - [ setTranslationDomain, [AcmeReactorApiBundle]]
+    reactr.sponsor.form.type:
+            class: Acme\ReactorApiBundle\Form\Type\SponsorLogoFormType
+            tags:
+                - { name: form.type, alias: reactr_sponsor_logo_form_type }

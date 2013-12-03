@@ -21,7 +21,7 @@ class SponsorAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
+            ->add('name')
             ->add('site_url')
             ->add('logo', null, array('label' => 'Logo', 'template' => 'AcmeReactorApiBundle:Admin:logo.html.twig'))
         ;
