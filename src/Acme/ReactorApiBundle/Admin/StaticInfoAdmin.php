@@ -28,10 +28,9 @@ class StaticInfoAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('About Reactr')
+            ->addIdentifier('support')
             ->add('Privacy')
             ->add('Terms')
-            ->add('Contact Us')
             ->add('email_body', null, array('label' => 'Welcome email body'))
             ->add('email_subject', null, array('label' => 'Welcome email subject'))
             ->add('email_body_remind', null, array('label' => 'Reset email body'))
