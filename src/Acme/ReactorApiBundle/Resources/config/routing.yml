@@ -88,4 +88,8 @@ remind_password:
 
 reset_password:
   pattern: /resetPassword/
-  defaults: { _controller: AcmeReactorApiBundle:Api:resetPassword }
+  defaults: { _controller: AcmeReactorApiBundle:Api:resetPassword }getSponsor
+
+get_sponsor:
+  pattern: /getSponsor/
+  defaults: { _controller: AcmeReactorApiBundle:Api:getSponsor }

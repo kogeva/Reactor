@@ -765,6 +765,24 @@ class ApiController extends Controller
         return new JsonResponse('Password changed');
     }
 
+    public function getSponsorAction(Request $request)
+    {
+        $userId       = $request->get('user_id', false);
+        $session_hash = $request->get('session_hash', false);
+
+        if ($userId && $session_hash)
+        {
+            $user = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:User')->find($userId);
+            if($user->getSessionHash() !== $session_hash)
+                return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
+
+            $sponsor = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Sponsor')->findAll();
+
+            return new JsonResponse(array( 'status' => 'success', 'sponsor' => $sponsor[0]->toArray()));
+        }
+        return new JsonResponse(array('status' => 'failed', 'error' => 'one of required parameters not defined'));
+    }
+
 
     private function generateSrcImage($filename)
     {

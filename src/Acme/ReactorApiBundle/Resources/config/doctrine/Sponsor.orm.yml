@@ -1,0 +1,17 @@
+Acme\ReactorApiBundle\Entity\Sponsor:
+  type: entity
+  table: sponsor
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    name:
+      type: string
+      length: 30
+    site_url:
+      type: string
+      length: 30
+    logo_url:
+      type: string
+      length: 255

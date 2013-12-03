@@ -16,3 +16,14 @@ services:
             class: Acme\ReactorApiBundle\Form\Type\PhotoFormType
             tags:
                 - { name: form.type, alias: reactr_photo_list }
+
+    reactr.sponsor:
+        class: Acme\ReactorApiBundle\Admin\SponsorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: posts, label: "Sponsors" }
+        arguments:
+            - ~
+            - Acme\ReactorApiBundle\Entity\Sponsor
+            - 'SonataAdminBundle:CRUD'
+        calls:
+            - [ setTranslationDomain, [AcmeReactorApiBundle]]
