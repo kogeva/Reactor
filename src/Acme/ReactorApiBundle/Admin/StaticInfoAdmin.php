@@ -14,7 +14,6 @@ class StaticInfoAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('about_reactr')
             ->add('privacy')
             ->add('terms')
             ->add('support')
