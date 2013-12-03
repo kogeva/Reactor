@@ -97,3 +97,7 @@ get_sponsor:
 sponsor_logo:
      pattern:      /acme/reactorapi/sponsor/change/{id}
      defaults:     { _controller: AcmeReactorApiBundle:SponsorAdmin:change }
+
+new_sponsor:
+     pattern:      /acme/reactorapi/sponsor/add
+     defaults:     { _controller: AcmeReactorApiBundle:SponsorAdmin:addNewSponsor }
