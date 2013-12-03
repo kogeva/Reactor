@@ -642,7 +642,8 @@ class ApiController extends Controller
                          'privacy' => $staticInfo->getPrivacy(),
                          'terms' => $staticInfo->getTerms(),
                          'contact_us' => $staticInfo->getContactUs(),
-                         'how_it_works' => $staticInfo->getHowItWorks()
+                         'how_it_works' => $staticInfo->getHowItWorks(),
+                         'support' => $staticInfo->getSupport()
                     ))
             );
 

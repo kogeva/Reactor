@@ -14,6 +14,9 @@ Acme\ReactorApiBundle\Entity\StaticInfo:
       type: text
     contact_us:
       type: text
+    support:
+      type: text
+      nullable: true
     email_body:
       type: text
     email_subject:

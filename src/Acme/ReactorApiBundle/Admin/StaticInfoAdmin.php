@@ -17,7 +17,7 @@ class StaticInfoAdmin extends Admin
             ->add('about_reactr')
             ->add('privacy')
             ->add('terms')
-            ->add('contact_us')
+            ->add('support')
             ->add('email_body', null, array('label' => 'Welcome email body'))
             ->add('email_subject', null, array('label' => 'Welcome email subject'))
             ->add('email_body_remind', null, array('label' => 'Reset email body'))
