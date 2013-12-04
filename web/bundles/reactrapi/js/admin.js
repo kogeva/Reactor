@@ -10,6 +10,7 @@ $(function() {
             async:      false,
             url:		url,
             success: function(status){
+                $( ".button-action-label").not(this).html('Not selected');
                 label.html(status);
             }
         });
