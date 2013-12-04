@@ -777,9 +777,14 @@ class ApiController extends Controller
             if($user->getSessionHash() !== $session_hash)
                 return new JsonResponse(array( 'status' => 'failed', 'error' => ' incorrect session hash'));
 
-            $sponsor = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Sponsor')->findAll();
-
-            return new JsonResponse(array( 'status' => 'success', 'sponsor' => $sponsor[0]->toArray()));
+            $sponsors = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Sponsor')->findAll();
+            $sponsor = null;
+            foreach($sponsors as $sp)
+            {
+                if ($sp->getSelected())
+                    $sponsor = $sp;
+            }
+            return new JsonResponse(array( 'status' => 'success', 'sponsor' => $sponsor->toArray()));
         }
         return new JsonResponse(array('status' => 'failed', 'error' => 'one of required parameters not defined'));
     }

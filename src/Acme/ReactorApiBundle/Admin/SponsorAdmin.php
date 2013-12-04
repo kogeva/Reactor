@@ -28,6 +28,7 @@ class SponsorAdmin extends Admin
             ->add('name')
             ->add('site_url')
             ->add('logo', null, array('label' => 'Logo', 'template' => 'AcmeReactorApiBundle:Admin:logo.html.twig'))
+            ->add('selected', null, array('label' => 'Logo', 'template' => 'AcmeReactorApiBundle:Admin:selected.html.twig'))
         ;
     }
 }

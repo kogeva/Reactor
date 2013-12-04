@@ -101,3 +101,10 @@ sponsor_logo:
 new_sponsor:
      pattern:      /acme/reactorapi/sponsor/add
      defaults:     { _controller: AcmeReactorApiBundle:SponsorAdmin:addNewSponsor }
+
+select_sponsor:
+     pattern:      /acme/reactorapi/sponsor/select/{id}
+     defaults:     { _controller: AcmeReactorApiBundle:SponsorAdmin:selectSponsor }
+     requirements:
+         id: \d+
+         _method:  POST

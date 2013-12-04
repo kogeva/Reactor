@@ -1,0 +1,11 @@
+{% extends admin.getTemplate('base_list_field') %}
+{% block field %}
+    {% if object.selected %}
+        {% set label = 'Selected' %}
+    {% else %}
+        {% set label = 'Not selected' %}
+    {% endif %}
+    <a href="{{ path('select_sponsor', {id: object.id}) }}" class="btn delete_link btn-small change-user-status" title="{{ label }}">
+        </i><span class="button-action-label">{{ label }}</span>
+    </a>
+{% endblock %}

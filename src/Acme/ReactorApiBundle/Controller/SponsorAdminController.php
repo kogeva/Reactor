@@ -108,6 +108,7 @@ class SponsorAdminController extends Controller
                     $sponsor->setName($name);
                     $sponsor->setSiteUrl($site);
                     $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
+                    $sponsor->setSelected(false);
                     $logo_url = $sponsor->getLogoUrl();
                     $em = $this->getDoctrine()->getEntityManager();
                     $em->persist($sponsor);
@@ -129,5 +130,40 @@ class SponsorAdminController extends Controller
                 'url'                           => $logo_url
             )
         );
+    }
+
+    public function selectSponsorAction($id)
+    {
+        if($this->container->get('request')->isXMLHttpRequest()) {
+            $request = $this->container->get('request')->attributes;
+            $id = $request->get('id');
+
+            $em = $this->container->get('doctrine')->getEntityManager();
+            $sponsor = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Sponsor')->find($id);
+            $sponsors = $this->getDoctrine()->getRepository('AcmeReactorApiBundle:Sponsor')->findAll();
+
+            foreach($sponsors as $sp)
+            {
+                if($sp->getId() != $id)
+                {
+                    $sp->setSelected(false);
+                    $em->persist($sp);
+                }
+            }
+
+            if (!$sponsor) {
+                throw new NotFoundHttpException(sprintf('unable to find the object with id : %s', $id));
+            }
+
+            $enabled = $sponsor->getSelected();
+            $sponsor->setSelected(!$enabled);
+
+            $em->persist($sponsor);
+            $em->flush();
+
+            $response = $sponsor->getSelected() ? 'Selected' : 'Not selected';
+
+            return new Response($response);
+        } else throw new NotFoundHttpException('Route not found');
     }
 }

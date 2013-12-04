@@ -15,3 +15,5 @@ Acme\ReactorApiBundle\Entity\Sponsor:
     logo_url:
       type: string
       length: 255
+    selected:
+      type: boolean
