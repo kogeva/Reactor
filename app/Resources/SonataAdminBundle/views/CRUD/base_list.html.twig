@@ -103,32 +103,7 @@
                                     <input type="submit" class="btn btn-small btn-primary" value="{{ 'btn_batch'|trans({}, 'SonataAdminBundle') }}"/>
                                 {% endif %}
 
-                                <div class="pull-right">
-                                    {% if admin.hasRoute('export') and admin.isGranted("EXPORT") and admin.getExportFormats()|length %}
-                                        {{ "label_export_download"|trans({}, "SonataAdminBundle") }}
-                                        {% for format in admin.getExportFormats() %}
-                                            <a href="{{ admin.generateUrl('export', admin.modelmanager.paginationparameters(admin.datagrid, 0) + {'format' : format}) }}">{{ format }}</a>{% if not loop.last %},{% endif %}
-                                        {% endfor %}
 
-                                        &nbsp;-&nbsp;
-                                    {% endif %}
-
-                                    {{ admin.datagrid.pager.page }} / {{ admin.datagrid.pager.lastpage }}
-
-                                    &nbsp;-&nbsp;
-
-                                    {% transchoice admin.datagrid.pager.nbresults with {'%count%': admin.datagrid.pager.nbresults} from 'SonataAdminBundle' %}list_results_count{% endtranschoice %}
-
-                                    &nbsp;-&nbsp;
-                                    <label class="control-label" for="{{ admin.uniqid }}_per_page">{% trans from 'SonataAdminBundle' %}label_per_page{% endtrans %}</label>
-                                    <select class="per-page small" id="{{ admin.uniqid }}_per_page" style="width: auto; height: auto">
-                                        {% for per_page in admin.getperpageoptions %}
-                                            <option {% if per_page == admin.datagrid.pager.maxperpage %}selected="selected"{% endif %} value="{{ admin.generateUrl('list', {'filter': admin.datagrid.values | merge({'_per_page': per_page})}) }}">
-                                                {{ per_page }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
                             {% endif %}
                         </div>
                     </th>
