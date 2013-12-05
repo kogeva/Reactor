@@ -42,7 +42,41 @@ class SponsorAdminController extends Controller
                 $result = true;
 
                 if($result) {
-                    $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
+                    $size = getimagesize($logo);
+
+                    if ($size[0] > 380 or $size[1] > 300)
+                    {
+                        if( $size['mime'] == 'image/jpeg' ) {
+                            $image = imagecreatefromjpeg($logo);
+                        } elseif( $size['mime'] == 'image/gif' ) {
+                            $image = imagecreatefromgif($logo);
+                        } elseif( $size['mime'] == 'image/png' ) {
+                            $image = imagecreatefrompng($logo);
+                        }
+
+                        $x = imagesx($image);
+                        $y = imagesy($image);
+                        $ratio = 380 / $x;
+                        $height = $y * $ratio;
+
+                        $ratio = 300 / $y;
+                        $width = $x * $ratio;
+
+                        $new_image = imagecreatetruecolor(380, 300);
+                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, 300, $x, $y);
+                        $image = $new_image;
+
+                        if( $size['mime'] == 'image/jpeg' ) {
+                            $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                        } elseif( $size['mime'] == 'image/gif' ) {
+                            $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());;
+                        } elseif( $size['mime'] == 'image/png' ) {
+                            $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());;
+                        }
+
+                    }
+                    else
+                        $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
                     $sponsor->setName($name);
                     $sponsor->setSiteUrl($site);
                     $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
