@@ -43,8 +43,10 @@ class SponsorAdminController extends Controller
                 if($result) {
                     $size = getimagesize($logo);
 
-                    if ($size[0] > 380)
+                    if ($size[1] > 300)
                     {
+
+
                         if( $size['mime'] == 'image/jpeg' ) {
                             $image = imagecreatefromjpeg($logo);
                         } elseif( $size['mime'] == 'image/gif' ) {
@@ -53,7 +55,26 @@ class SponsorAdminController extends Controller
                             $image = imagecreatefrompng($logo);
                         }
 
-                        $x = imagesx($image);
+                        $width = (300 * $size[0])/$size[1];
+
+                        $new_image = imagecreatetruecolor($width, 300);
+                        imageAlphaBlending($new_image, false);
+                        imageSaveAlpha($new_image, true);
+                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, $width, 300, $size[0], $size[1]);
+                        $image = $new_image;
+
+                        if ($width > 380)
+                        {
+                            $height = (380 * 300)/$width;
+
+                            $new_image = imagecreatetruecolor(380, $height);
+                            imageAlphaBlending($new_image, false);
+                            imageSaveAlpha($new_image, true);
+                            imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $width, 300);
+                            $image = $new_image;
+                        }
+
+                        /*$x = imagesx($image);
                         $y = imagesy($image);
                         $ratio = 380 / $x;
                         $height = $y * $ratio;
@@ -62,7 +83,7 @@ class SponsorAdminController extends Controller
                         imageAlphaBlending($new_image, false);
                         imageSaveAlpha($new_image, true);
                         imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $x, $y);
-                        $image = $new_image;
+                        $image = $new_image;*/
 
                         if( $size['mime'] == 'image/jpeg' ) {
                             $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
