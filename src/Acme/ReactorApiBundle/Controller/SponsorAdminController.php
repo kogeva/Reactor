@@ -37,14 +37,13 @@ class SponsorAdminController extends Controller
             $site = $requestData['site_url'];
 
             $logo = $files['logo'];
-
             if($logo) {
                 $result = true;
 
                 if($result) {
                     $size = getimagesize($logo);
 
-                    if ($size[0] > 380 or $size[1] > 300)
+                    if ($size[0] > 380)
                     {
                         if( $size['mime'] == 'image/jpeg' ) {
                             $image = imagecreatefromjpeg($logo);
@@ -59,11 +58,10 @@ class SponsorAdminController extends Controller
                         $ratio = 380 / $x;
                         $height = $y * $ratio;
 
-                        $ratio = 300 / $y;
-                        $width = $x * $ratio;
-
-                        $new_image = imagecreatetruecolor(380, 300);
-                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, 300, $x, $y);
+                        $new_image = imagecreatetruecolor(380, $height);
+                        imageAlphaBlending($new_image, false);
+                        imageSaveAlpha($new_image, true);
+                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $x, $y);
                         $image = $new_image;
 
                         if( $size['mime'] == 'image/jpeg' ) {
@@ -159,6 +157,8 @@ class SponsorAdminController extends Controller
 
 
                         $new_image = imagecreatetruecolor(380, $height);
+                        imageAlphaBlending($new_image, false);
+                        imageSaveAlpha($new_image, true);
                         imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $x, $y);
                         $image = $new_image;
 
