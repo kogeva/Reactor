@@ -1,0 +1,6 @@
+{% extends admin.getTemplate('base_list_field') %}
+{% block field %}
+    <a href="{{ path('sponsor_logo', {id: object.id}) }}" class="btn edit_link btn-small" title="Show" target="_blank">
+        <i class="icon-info-sign"></i> Change
+    </a>
+{% endblock %}
