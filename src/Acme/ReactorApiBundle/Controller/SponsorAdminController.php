@@ -210,18 +210,20 @@ class SponsorAdminController extends Controller
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($sponsor);
             $em->flush();
-        }
 
-        return $this->container->get('templating')->renderResponse(
-            'AcmeReactorApiBundle:Admin:new_sponsor.html.twig',
-            array(
-                'admin_pool' 					=> $adminPool,
-                'form' 		 					=> $form->createView(),
-                'error'							=> $error,
-                'success'    					=> $success,
-                'url'                           => $logo_url
-            )
-        );
+            return $this->redirect($this->generateUrl('sponsor_logo', array('id' => $sponsor->getId())));
+        }
+        else
+            return $this->container->get('templating')->renderResponse(
+                'AcmeReactorApiBundle:Admin:new_sponsor.html.twig',
+                array(
+                    'admin_pool' 					=> $adminPool,
+                    'form' 		 					=> $form->createView(),
+                    'error'							=> $error,
+                    'success'    					=> $success,
+                    'url'                           => $logo_url
+                )
+            );
     }
 
     public function selectSponsorAction($id)
