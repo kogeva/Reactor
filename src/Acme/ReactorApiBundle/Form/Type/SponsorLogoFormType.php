@@ -21,9 +21,9 @@ class SponsorLogoFormType extends AbstractType
             $url  = '';
         }
         $builder
-            ->add('name', 'text', array('data' =>  $name))
-            ->add('site_url', 'text', array('data' =>  $url))
-            ->add('logo', 'file', array('required' => true, 'label' => 'Logo'));
+            ->add('name', 'text', array('data' =>  $name, 'required' => false))
+            ->add('site_url', 'text', array('data' =>  $url, 'required' => false))
+            ->add('logo', 'file', array('required' => true, 'label' => 'Logo', 'required' => false));
     }
 
     public function getName()

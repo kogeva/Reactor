@@ -40,75 +40,75 @@ class SponsorAdminController extends Controller
             if($logo) {
                 $result = true;
 
-                if($result) {
-                    $size = getimagesize($logo);
+                $size = getimagesize($logo);
 
-                    if ($size[1] >= 300)
+                if ($size[1] > 300)
+                {
+
+
+                    if( $size['mime'] == 'image/jpeg' ) {
+                        $image = imagecreatefromjpeg($logo);
+                    } elseif( $size['mime'] == 'image/gif' ) {
+                        $image = imagecreatefromgif($logo);
+                    } elseif( $size['mime'] == 'image/png' ) {
+                        $image = imagecreatefrompng($logo);
+                    }
+
+                    $width = (300 * $size[0])/$size[1];
+
+                    $new_image = imagecreatetruecolor($width, 300);
+                    imageAlphaBlending($new_image, false);
+                    imageSaveAlpha($new_image, true);
+                    imagecopyresampled($new_image, $image, 0, 0, 0, 0, $width, 300, $size[0], $size[1]);
+                    $image = $new_image;
+
+                    if ($width > 380)
                     {
-
-
-                        if( $size['mime'] == 'image/jpeg' ) {
-                            $image = imagecreatefromjpeg($logo);
-                        } elseif( $size['mime'] == 'image/gif' ) {
-                            $image = imagecreatefromgif($logo);
-                        } elseif( $size['mime'] == 'image/png' ) {
-                            $image = imagecreatefrompng($logo);
-                        }
-
-                        $width = (300 * $size[0])/$size[1];
-
-                        $new_image = imagecreatetruecolor($width, 300);
-                        imageAlphaBlending($new_image, false);
-                        imageSaveAlpha($new_image, true);
-                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, $width, 300, $size[0], $size[1]);
-                        $image = $new_image;
-
-                        if ($width >= 380)
-                        {
-                            $height = (380 * 300)/$width;
-
-                            $new_image = imagecreatetruecolor(380, $height);
-                            imageAlphaBlending($new_image, false);
-                            imageSaveAlpha($new_image, true);
-                            imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $width, 300);
-                            $image = $new_image;
-                        }
-
-                        /*$x = imagesx($image);
-                        $y = imagesy($image);
-                        $ratio = 380 / $x;
-                        $height = $y * $ratio;
+                        $height = (380 * 300)/$width;
 
                         $new_image = imagecreatetruecolor(380, $height);
                         imageAlphaBlending($new_image, false);
                         imageSaveAlpha($new_image, true);
-                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $x, $y);
-                        $image = $new_image;*/
-
-                        if( $size['mime'] == 'image/jpeg' ) {
-                            $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
-                        } elseif( $size['mime'] == 'image/gif' ) {
-                            $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
-                        } elseif( $size['mime'] == 'image/png' ) {
-                            $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
-                        }
-
+                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $width, 300);
+                        $image = $new_image;
                     }
-                    else
-                        $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
 
-                    $sponsor->setName($name);
-                    $sponsor->setSiteUrl($site);
-                    $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
+                    /*$x = imagesx($image);
+                    $y = imagesy($image);
+                    $ratio = 380 / $x;
+                    $height = $y * $ratio;
 
-                    $em = $this->getDoctrine()->getEntityManager();
-                    $em->persist($sponsor);
-                    $em->flush();
+                    $new_image = imagecreatetruecolor(380, $height);
+                    imageAlphaBlending($new_image, false);
+                    imageSaveAlpha($new_image, true);
+                    imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $x, $y);
+                    $image = $new_image;*/
+
+                    if( $size['mime'] == 'image/jpeg' ) {
+                        $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                    } elseif( $size['mime'] == 'image/gif' ) {
+                        $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                    } elseif( $size['mime'] == 'image/png' ) {
+                        $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                    }
+
                 }
+                else
+                    $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
 
-            } else {
-                $error = 'Please, choose image to upload';
+                $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
+
+
             }
+            $sponsor->setName($name);
+            if (stristr($site, 'http://'))
+                $sponsor->setSiteUrl($site);
+            else
+                $sponsor->setSiteUrl('http://'.$site);
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($sponsor);
+            $em->flush();
         }else
         {
             $form = $this->container->get('form.factory')->create(new SponsorLogoFormType(),
@@ -157,77 +157,59 @@ class SponsorAdminController extends Controller
             if($logo) {
                 $result = true;
 
-                if($result) {
 
-                    $size = getimagesize($logo);
+                $size = getimagesize($logo);
 
-                    if ($size[1] >= 300)
-                    {
-
-
-                        if( $size['mime'] == 'image/jpeg' ) {
-                            $image = imagecreatefromjpeg($logo);
-                        } elseif( $size['mime'] == 'image/gif' ) {
-                            $image = imagecreatefromgif($logo);
-                        } elseif( $size['mime'] == 'image/png' ) {
-                            $image = imagecreatefrompng($logo);
-                        }
-
-                        $width = (300 * $size[0])/$size[1];
-
-                        $new_image = imagecreatetruecolor($width, 300);
-                        imageAlphaBlending($new_image, false);
-                        imageSaveAlpha($new_image, true);
-                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, $width, 300, $size[0], $size[1]);
-                        $image = $new_image;
-
-                        if ($width >= 380)
-                        {
-                            $height = (380 * 300)/$width;
-
-                            $new_image = imagecreatetruecolor(380, $height);
-                            imageAlphaBlending($new_image, false);
-                            imageSaveAlpha($new_image, true);
-                            imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $width, 300);
-                            $image = $new_image;
-                        }
-
-                        /*$x = imagesx($image);
-                        $y = imagesy($image);
-                        $ratio = 380 / $x;
-                        $height = $y * $ratio;
-
-                        $new_image = imagecreatetruecolor(380, $height);
-                        imageAlphaBlending($new_image, false);
-                        imageSaveAlpha($new_image, true);
-                        imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $x, $y);
-                        $image = $new_image;*/
-
-                        if( $size['mime'] == 'image/jpeg' ) {
-                            $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
-                        } elseif( $size['mime'] == 'image/gif' ) {
-                            $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
-                        } elseif( $size['mime'] == 'image/png' ) {
-                            $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
-                        }
-
+                if ($size[0] > 380)
+                {
+                    if( $size['mime'] == 'image/jpeg' ) {
+                        $image = imagecreatefromjpeg($logo);
+                    } elseif( $size['mime'] == 'image/gif' ) {
+                        $image = imagecreatefromgif($logo);
+                    } elseif( $size['mime'] == 'image/png' ) {
+                        $image = imagecreatefrompng($logo);
                     }
-                    else
-                        $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
 
-                    $sponsor->setName($name);
-                    $sponsor->setSiteUrl($site);
-                    $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
-                    $sponsor->setSelected(false);
-                    $logo_url = $sponsor->getLogoUrl();
-                    $em = $this->getDoctrine()->getEntityManager();
-                    $em->persist($sponsor);
-                    $em->flush();
+                    $x = imagesx($image);
+                    $y = imagesy($image);
+                    $ratio = 380 / $x;
+                    $height = $y * $ratio;
+
+
+                    $new_image = imagecreatetruecolor(380, $height);
+                    imageAlphaBlending($new_image, false);
+                    imageSaveAlpha($new_image, true);
+                    imagecopyresampled($new_image, $image, 0, 0, 0, 0, 380, $height, $x, $y);
+                    $image = $new_image;
+
+                    if( $size['mime'] == 'image/jpeg' ) {
+                        $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                    } elseif( $size['mime'] == 'image/gif' ) {
+                        $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                    } elseif( $size['mime'] == 'image/png' ) {
+                        $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                    }
                 }
+                else
+                    $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
 
-            } else {
-                $error = 'Please, choose image to upload';
+
+                $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
+                $logo_url = $sponsor->getLogoUrl();
+
+
             }
+
+            $sponsor->setName($name);
+            if (stristr($site, 'http://'))
+                $sponsor->setSiteUrl($site);
+            else
+                $sponsor->setSiteUrl('http://'.$site);
+            $sponsor->setSelected(false);
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $em->persist($sponsor);
+            $em->flush();
         }
 
         return $this->container->get('templating')->renderResponse(
