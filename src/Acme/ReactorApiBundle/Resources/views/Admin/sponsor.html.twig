@@ -7,7 +7,7 @@
         <a href="{{ path('sonata_admin_dashboard') }}">Dashboard</a>
         <span class="divider">/</span>
     </li>
-    <li class="active">Change Background Image</li>
+    <li class="active">Change sponsor</li>
 {% endblock %}
 {% block content %}
 
@@ -52,6 +52,11 @@
 
         <div class="well well-small form-actions">
             <input type="submit" class="btn btn-primary" value="Change"/>
+            <div class="row-fluid m-bot-5">
+                <div class="span6" style="margin-left: -70px; margin-top: -30px">
+                    <a href="{{ path('admin_acme_reactorapi_sponsor_list') }}" class="btn">Back</a>
+                </div>
+            </div>
         </div>
     </form>
 
