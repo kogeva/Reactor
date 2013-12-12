@@ -19,11 +19,11 @@ Acme\ReactorApiBundle\Entity\User:
               - Email: ~
           phone:
               - NotBlank: ~
-              #- Length:
-              #    min: 1
-              #    max: 10
-              #    minMessage: Phone number is too short
-              #    maxMessage: Phone number is too long
+              - Length:
+                  min: 5
+                  max: 20
+                  minMessage: Phone number is too short
+                  maxMessage: Phone number is too long
               #- Range:
               #    min: 1
               #    max: 9999999999
