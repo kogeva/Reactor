@@ -85,18 +85,18 @@ class SponsorAdminController extends Controller
                     $image = $new_image;*/
 
                     if( $size['mime'] == 'image/jpeg' ) {
-                        $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                        $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../../ReactrSite/image/sponsor/'.$logo->getClientOriginalName());
                     } elseif( $size['mime'] == 'image/gif' ) {
-                        $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                        $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../../ReactrSite/image/sponsor/'.$logo->getClientOriginalName());
                     } elseif( $size['mime'] == 'image/png' ) {
-                        $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                        $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../../ReactrSite/image/sponsor/'.$logo->getClientOriginalName());
                     }
 
                 }
                 else
-                    $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
+                    $result= $logo->move($this->get('kernel')->getRootDir(). '/..//../ReactrSite/image/sponsor/', $logo->getClientOriginalName());
 
-                $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
+                $sponsor->setLogoUrl('http://reactrapp.com/image/sponsor/'.$logo->getClientOriginalName());
 
 
             }
@@ -183,18 +183,18 @@ class SponsorAdminController extends Controller
                     $image = $new_image;
 
                     if( $size['mime'] == 'image/jpeg' ) {
-                        $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                        $result = imagejpeg($image,$this->get('kernel')->getRootDir(). '/..//../ReactrSite/image/sponsor/'.$logo->getClientOriginalName());
                     } elseif( $size['mime'] == 'image/gif' ) {
-                        $result = imagegif($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                        $result = imagegif($image,$this->get('kernel')->getRootDir(). '/..//../ReactrSite/image/sponsor/'.$logo->getClientOriginalName());
                     } elseif( $size['mime'] == 'image/png' ) {
-                        $result = imagepng($image,$this->get('kernel')->getRootDir(). '/../web/images/'.$logo->getClientOriginalName());
+                        $result = imagepng($image,$this->get('kernel')->getRootDir(). '/..//../ReactrSite/image/sponsor/'.$logo->getClientOriginalName());
                     }
                 }
                 else
-                    $result= $logo->move($this->get('kernel')->getRootDir(). '/../web/images', $logo->getClientOriginalName());
+                    $result= $logo->move($this->get('kernel')->getRootDir(). '/..//../ReactrSite/image/sponsor/', $logo->getClientOriginalName());
 
 
-                $sponsor->setLogoUrl('http://'.$this->getRequest()->getHost().'/images/'.$logo->getClientOriginalName());
+                $sponsor->setLogoUrl('http://reactrapp.com/image/sponsor/'.$logo->getClientOriginalName());
                 $logo_url = $sponsor->getLogoUrl();
 
 
